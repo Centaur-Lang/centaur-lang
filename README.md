@@ -261,7 +261,7 @@ MIT License — See [LICENSE](LICENSE) for details.
 | | |
 |---|---|
 | 🌐 Website | [centaur-lang.dev](https://centaur-lang.dev) |
-| 📜 Manifesto | [centaur.pixella.at](https://centaur.pixella.at) |
+| 📜 Manifesto | [centaur.pixella.at](https://centaur.australianweb.agency) |
 | 💻 GitHub | [github.com/Centaur-Lang/centaur-lang](https://github.com/Centaur-Lang/centaur-lang) |
 
 ---
