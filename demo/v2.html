@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTAUR LANG v0.2.0 - New Components Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --surface: #141416;
+            --text: #ffffff;
+            --muted: #888;
+            --gold: #D4AF37;
+            --emerald: #00C853;
+            --coral: #FF6B6B;
+            --border: #2a2a2f;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        
+        .demo-header {
+            text-align: center;
+            padding: 80px 40px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #0f0f12 0%, var(--bg) 100%);
+        }
+        .demo-header h1 { font-size: clamp(2rem, 6vw, 3.5rem); margin-bottom: 16px; letter-spacing: -1px; }
+        .demo-header h1 span { color: var(--gold); }
+        .demo-header p { color: var(--muted); font-size: 1.2rem; margin-bottom: 24px; }
+        .version-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: #0a0a0b;
+            padding: 10px 24px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .component-section {
+            padding: 80px 40px;
+            border-bottom: 1px solid var(--border);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .component-section h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .component-section h2 .new-badge {
+            background: var(--emerald);
+            color: #0a0a0b;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .component-section > p { color: var(--muted); margin-bottom: 40px; max-width: 600px; }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            align-items: start;
+        }
+        
+        .code-block {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .code-header {
+            padding: 14px 20px;
+            background: #1a1a1d;
+            font-size: 13px;
+            color: var(--gold);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .code-content {
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            white-space: pre;
+            overflow-x: auto;
+        }
+        .code-content .dir { color: var(--gold); }
+        .code-content .str { color: var(--emerald); }
+        .code-content .cmt { color: #555; }
+        
+        .preview-frame {
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .preview-header {
+            padding: 14px 20px;
+            background: #1a1a1d;
+            font-size: 13px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .preview-header::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--emerald);
+            border-radius: 50%;
+        }
+        .preview-content { padding: 0; }
+        
+        /* Hero Preview */
+        .hero-preview {
+            min-height: 380px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #0f0f14 0%, #1a1a20 100%);
+        }
+        .hero-preview .h-badge {
+            display: inline-block;
+            background: rgba(212,175,55,0.15);
+            color: var(--gold);
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(212,175,55,0.3);
+        }
+        .hero-preview h3 {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+        .hero-preview .sub { color: var(--muted); margin-bottom: 28px; font-size: 15px; }
+        .hero-preview .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .hero-preview .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .hero-preview .btn-primary { background: var(--gold); color: #0a0a0b; }
+        .hero-preview .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212,175,55,0.3); }
+        .hero-preview .btn-secondary { background: transparent; color: var(--text); border: 2px solid var(--border); }
+        .hero-preview .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+        
+        /* Card Preview */
+        .card-preview {
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0f0a 0%, #0f1a0f 100%);
+        }
+        .card {
+            width: 280px;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.4s;
+        }
+        .card:hover { transform: translateY(-6px); border-color: var(--emerald); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .card-img {
+            height: 140px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .card-body { padding: 20px; }
+        .card-body .c-badge {
+            display: inline-block;
+            background: rgba(0,200,83,0.15);
+            color: var(--emerald);
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .card-body h4 { font-size: 1.15rem; margin-bottom: 8px; }
+        .card-body .desc { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+        .card-body .price { font-size: 1.4rem; font-weight: 800; color: var(--emerald); margin-bottom: 16px; }
+        .card-body .c-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: var(--emerald);
+            color: #0a0a0b;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .card-body .c-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,200,83,0.3); }
+        
+        /* Nav Preview */
+        .nav-preview-wrap { background: var(--bg); }
+        .nav {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-logo { font-weight: 800; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+        .nav-links { display: flex; gap: 28px; list-style: none; }
+        .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-cta {
+            background: var(--gold);
+            color: #0a0a0b;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,175,55,0.3); }
+        .nav-content { padding: 60px 24px; text-align: center; color: var(--muted); font-size: 14px; }
+        
+        /* Footer */
+        .demo-footer {
+            padding: 80px 40px;
+            text-align: center;
+            background: var(--surface);
+        }
+        .demo-footer h3 { font-size: 1.8rem; margin-bottom: 16px; }
+        .demo-footer h3 span { color: var(--gold); }
+        .demo-footer .quote { color: var(--muted); margin-bottom: 32px; font-style: italic; font-size: 1.1rem; }
+        .demo-footer .cta-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: #0a0a0b;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .demo-footer .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(212,175,55,0.4); }
+        .demo-footer .credits { margin-top: 40px; color: var(--muted); font-size: 13px; }
+        
+        @media (max-width: 900px) {
+            .demo-grid { grid-template-columns: 1fr; }
+            .component-section { padding: 60px 20px; }
+            .demo-header { padding: 60px 20px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="demo-header">
+        <h1>🐴 CENTAUR LANG <span>v0.2.0</span></h1>
+        <p>New Components: Hero, Card, Navigation</p>
+        <span class="version-badge">✨ NEW RELEASE — December 2025</span>
+    </header>
+
+    <!-- HERO -->
+    <section class="component-section">
+        <h2>🚀 Hero Component <span class="new-badge">NEW</span></h2>
+        <p>Create stunning hero sections with badges, headlines, subheadlines, and call-to-action buttons.</p>
+        
+        <div class="demo-grid">
+            <div class="code-block">
+                <div class="code-header">HeroSection.centaur</div>
+                <div class="code-content"><span class="dir">@component</span> HeroSection
+<span class="dir">@theme</span> dark
+<span class="dir">@accent</span> gold
+
+{
+  Create a hero section with:
+  
+  - Badge: <span class="str">"New Release"</span>
+  - Headline: <span class="str">"Build Faster Than Ever"</span>
+  - Subheadline: <span class="str">"The modern way to create apps"</span>
+  - Primary button: <span class="str">"Get Started"</span>
+  - Secondary button: <span class="str">"Learn More"</span>
+}</div>
+            </div>
+            <div class="preview-frame">
+                <div class="preview-header">Live Preview</div>
+                <div class="preview-content">
+                    <div class="hero-preview">
+                        <div>
+                            <span class="h-badge">✨ New Release</span>
+                            <h3>Build Faster Than Ever</h3>
+                            <p class="sub">The modern way to create stunning web applications</p>
+                            <div class="buttons">
+                                <a href="#" class="btn btn-primary">Get Started</a>
+                                <a href="#" class="btn btn-secondary">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARD -->
+    <section class="component-section">
+        <h2>🃏 Card Component <span class="new-badge">NEW</span></h2>
+        <p>Generate product cards with images, badges, prices, descriptions, and action buttons.</p>
+        
+        <div class="demo-grid">
+            <div class="code-block">
+                <div class="code-header">ProductCard.centaur</div>
+                <div class="code-content"><span class="dir">@component</span> ProductCard
+<span class="dir">@theme</span> dark
+<span class="dir">@accent</span> emerald
+
+{
+  Create a product card with:
+  
+  - Image placeholder
+  - Badge: <span class="str">"Best Seller"</span>
+  - Title: <span class="str">"Premium Package"</span>
+  - Description: <span class="str">"Everything you need"</span>
+  - Price: <span class="str">"$299.00"</span>
+  - Button: <span class="str">"Add to Cart"</span>
+}</div>
+            </div>
+            <div class="preview-frame">
+                <div class="preview-header">Live Preview</div>
+                <div class="preview-content">
+                    <div class="card-preview">
+                        <div class="card">
+                            <div class="card-img">📷 Image</div>
+                            <div class="card-body">
+                                <span class="c-badge">Best Seller</span>
+                                <h4>Premium Package</h4>
+                                <p class="desc">Everything you need to succeed</p>
+                                <div class="price">$299.00</div>
+                                <a href="#" class="c-btn">Add to Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NAVIGATION -->
+    <section class="component-section">
+        <h2>🧭 Navigation Component <span class="new-badge">NEW</span></h2>
+        <p>Build responsive navigation bars with logos, menu links, and CTA buttons. Mobile-friendly with hamburger menu.</p>
+        
+        <div class="demo-grid">
+            <div class="code-block">
+                <div class="code-header">Navigation.centaur</div>
+                <div class="code-content"><span class="dir">@component</span> Navigation
+<span class="dir">@theme</span> dark
+<span class="dir">@accent</span> gold
+
+{
+  Create a navigation with:
+  
+  - Logo: <span class="str">"CENTAUR"</span>
+  - Links:
+    - Home
+    - Features
+    - Pricing
+    - About
+  - CTA button: <span class="str">"Get Started"</span>
+}</div>
+            </div>
+            <div class="preview-frame">
+                <div class="preview-header">Live Preview</div>
+                <div class="preview-content">
+                    <div class="nav-preview-wrap">
+                        <nav class="nav">
+                            <a href="#" class="nav-logo">🐴 CENTAUR</a>
+                            <ul class="nav-links">
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">Features</a></li>
+                                <li><a href="#">Pricing</a></li>
+                                <li><a href="#">About</a></li>
+                            </ul>
+                            <a href="#" class="nav-cta">Get Started</a>
+                        </nav>
+                        <div class="nav-content">
+                            <p>Your page content goes here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="demo-footer">
+        <h3>🐴 CENTAUR LANG <span>v0.2.0</span></h3>
+        <p class="quote">"Neither human alone, nor AI alone — but something greater together."</p>
+        <a href="https://github.com/Centaur-Lang/centaur-lang" class="cta-btn">⭐ View on GitHub</a>
+        <p class="credits">Created by Chris Conen & Claude • December 2025 • MIT License</p>
+    </footer>
+</body>
+</html>
