@@ -1,0 +1,38 @@
+// ============================================
+// CENTAUR LANG Example: Contact Form
+// This is a .centaur source file
+// ============================================
+
+@component ContactForm
+@theme dark
+@accent gold
+@responsive true
+@language en
+
+{
+  Create an elegant contact form with:
+  
+  Fields:
+  - Name input (required, placeholder "Your Name")
+  - Email input (required, validate email format)
+  - Subject dropdown with options: General, Support, Partnership, Feedback
+  - Message textarea (required, min 10 characters)
+  
+  Styling:
+  - Rounded corners on all inputs
+  - Gold border on focus
+  - Subtle shadow on the form container
+  - Inputs should have dark background with light text
+  
+  Submit button:
+  - Text: "Send Message"
+  - Gold background, dark text
+  - Hover effect: slight glow
+  
+  Behavior:
+  - Validate on submit
+  - Show inline errors below invalid fields
+  - On success: show "Message sent successfully!" toast for 3 seconds
+  - Disable button while "sending" (simulate 1 second delay)
+  - Clear the form after successful submission
+}

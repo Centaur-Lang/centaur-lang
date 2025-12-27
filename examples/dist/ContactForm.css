@@ -1,0 +1,190 @@
+/**
+ * @centaur-generated true
+ * @centaur-version 0.1.0
+ * @component ContactForm
+ * @human Chris Conen - specification, intent
+ * @ai Claude - implementation
+ * @timestamp 2025-12-27T06:20:43.223Z
+ */
+
+/* ============================================
+   CENTAUR LANG Generated Styles
+   Theme: dark
+   Accent: gold
+   ============================================ */
+
+:root {
+    --bg-primary: #1a1a1a;
+    --bg-surface: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-muted: #a0a0a0;
+    --border-color: #404040;
+    --accent: #C9A227;
+    --accent-glow: #C9A22740;
+    --radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Form Container */
+.centaur-form-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.centaur-form {
+    background: var(--bg-surface);
+    padding: 40px;
+    border-radius: calc(var(--radius) * 2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+/* Inputs */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Error States */
+.form-group.has-error input,
+.form-group.has-error textarea,
+.form-group.has-error select {
+    border-color: #ff4444;
+}
+
+.error-message {
+    display: block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #ff4444;
+    min-height: 20px;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 16px 24px;
+    background: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: var(--radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--accent);
+    color: var(--bg-primary);
+    padding: 16px 32px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .centaur-form {
+        padding: 24px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 12px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .centaur-form {
+        padding: 20px;
+        border-radius: var(--radius);
+    }
+}

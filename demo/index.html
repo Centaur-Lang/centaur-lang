@@ -1,0 +1,1235 @@
+<!--
+    @centaur-generated false
+    @human Chris Conen - vision, creative direction
+    @ai Claude - full implementation
+    @project CENTAUR LANG Demo Page
+    @timestamp 2025-12-27
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTAUR LANG — The Language of Human+AI Collaboration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-void: #0a0a0b;
+            --bg-surface: #111113;
+            --bg-elevated: #1a1a1d;
+            --bg-hover: #222226;
+            --gold: #C9A227;
+            --gold-light: #E8C547;
+            --gold-glow: rgba(201, 162, 39, 0.3);
+            --gold-subtle: rgba(201, 162, 39, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a5;
+            --text-muted: #606065;
+            --border: #2a2a2f;
+            --success: #00C853;
+            --error: #FF4444;
+            --gradient-gold: linear-gradient(135deg, #C9A227 0%, #E8C547 50%, #C9A227 100%);
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-void);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ============================================
+           ANIMATED BACKGROUND
+           ============================================ */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .glow-orb-1 { top: -200px; right: -200px; }
+        .glow-orb-2 { bottom: -300px; left: -200px; animation-delay: -10s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-50px, 50px) scale(1.1); }
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 11, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .nav-logo span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: var(--gradient-gold);
+            color: var(--bg-void);
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--gold-glow);
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 140px 40px 80px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gold-subtle);
+            border: 1px solid var(--gold);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-family: var(--font-display);
+        }
+
+        .btn-primary {
+            background: var(--gradient-gold);
+            color: var(--bg-void);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px var(--gold-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================
+           LIVE EDITOR SECTION
+           ============================================ */
+        .editor-section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .editor-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .editor-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .editor-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .editor-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .editor-tab.active {
+            background: var(--gold-subtle);
+            color: var(--gold);
+        }
+
+        .editor-tab:hover:not(.active) {
+            background: var(--bg-hover);
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .editor-btn {
+            padding: 8px 16px;
+            background: var(--gold);
+            color: var(--bg-void);
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .editor-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+        }
+
+        .editor-btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .editor-btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .editor-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 500px;
+        }
+
+        .editor-pane {
+            position: relative;
+        }
+
+        .editor-pane-header {
+            padding: 12px 20px;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .editor-input {
+            width: 100%;
+            height: calc(100% - 44px);
+            min-height: 456px;
+            background: var(--bg-surface);
+            border: none;
+            padding: 20px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            resize: none;
+            outline: none;
+        }
+
+        .editor-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .preview-pane {
+            border-left: 1px solid var(--border);
+            background: var(--bg-void);
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: calc(100% - 44px);
+            min-height: 456px;
+            border: none;
+            background: #1a1a1a;
+        }
+
+        /* Template buttons */
+        .template-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .template-btn {
+            padding: 10px 20px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .template-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: var(--gold-subtle);
+        }
+
+        /* ============================================
+           HOW IT WORKS
+           ============================================ */
+        .how-section {
+            position: relative;
+            z-index: 1;
+            padding: 120px 40px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 30px;
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-gold);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--bg-void);
+            font-size: 1.1rem;
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .step-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+
+        .step-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           FOUNDERS SECTION
+           ============================================ */
+        .founders-section {
+            position: relative;
+            z-index: 1;
+            padding: 120px 40px;
+            background: var(--bg-surface);
+        }
+
+        .founders-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .founder-card {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .founder-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: var(--bg-elevated);
+            border: 3px solid var(--gold);
+        }
+
+        .founder-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .founder-role {
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .founder-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+        .cta-section {
+            position: relative;
+            z-index: 1;
+            padding: 120px 40px;
+            text-align: center;
+        }
+
+        .cta-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-gold);
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .cta-box p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .footer-brand span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .editor-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .preview-pane {
+                border-left: none;
+                border-top: 1px solid var(--border);
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .founders-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .editor-section,
+            .how-section,
+            .founders-section,
+            .cta-section {
+                padding: 60px 20px;
+            }
+
+            .editor-toolbar {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .cta-box {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-grid"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="nav-logo">
+            <span class="nav-logo-icon">🐴</span>
+            <span>CENTAUR LANG</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#editor">Try It</a></li>
+            <li><a href="#how">How It Works</a></li>
+            <li><a href="#founders">Founders</a></li>
+            <li><a href="https://github.com/centaur-lang/centaur-lang" target="_blank">GitHub</a></li>
+        </ul>
+        <a href="#editor" class="nav-cta">Get Started</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            World's First Human+AI Programming Language
+        </div>
+        <h1>
+            Describe it.<br>
+            <span class="highlight">We'll build it.</span>
+        </h1>
+        <p class="hero-subtitle">
+            CENTAUR LANG transforms natural language into production-ready code. 
+            No frameworks. No complexity. Just describe what you want.
+        </p>
+        <div class="hero-cta-group">
+            <a href="#editor" class="btn btn-primary">Try Live Editor</a>
+            <a href="https://github.com/centaur-lang/centaur-lang" class="btn btn-secondary" target="_blank">View on GitHub</a>
+        </div>
+    </section>
+
+    <!-- Live Editor Section -->
+    <section class="editor-section" id="editor">
+        <div class="section-header">
+            <p class="section-tag">Live Playground</p>
+            <h2 class="section-title">See It In Action</h2>
+            <p class="section-subtitle">Write natural language on the left. Watch it transform into working code on the right.</p>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-toolbar">
+                <div class="editor-tabs">
+                    <button class="editor-tab active">ContactForm.centaur</button>
+                </div>
+                <div class="editor-actions">
+                    <button class="editor-btn-secondary editor-btn" onclick="copyCode()">📋 Copy</button>
+                    <button class="editor-btn" onclick="compileCode()">▶ Compile</button>
+                </div>
+            </div>
+            <div class="editor-body">
+                <div class="editor-pane">
+                    <div class="editor-pane-header">📝 CENTAUR Source</div>
+                    <textarea class="editor-input" id="centaurInput" placeholder="Write your CENTAUR code here...">@component ContactForm
+@theme dark
+@accent gold
+@responsive true
+
+{
+  Create an elegant contact form with:
+  
+  Fields:
+  - Name input (required, placeholder "Your Name")
+  - Email input (required, validate email format)
+  - Subject dropdown with options: General, Support, Partnership
+  - Message textarea (required, min 10 characters)
+  
+  Submit button:
+  - Text: "Send Message"
+  
+  Behavior:
+  - Validate on submit
+  - Show inline errors below invalid fields
+  - On success: show "Message sent!" toast for 3 seconds
+}</textarea>
+                </div>
+                <div class="editor-pane preview-pane">
+                    <div class="editor-pane-header">🖥 Live Preview</div>
+                    <iframe class="preview-frame" id="previewFrame"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="template-buttons">
+            <button class="template-btn" onclick="loadTemplate('form')">📝 Contact Form</button>
+            <button class="template-btn" onclick="loadTemplate('hero')">🚀 Hero Section</button>
+            <button class="template-btn" onclick="loadTemplate('card')">🃏 Product Card</button>
+            <button class="template-btn" onclick="loadTemplate('login')">🔐 Login Form</button>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <p class="section-tag">The Process</p>
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps from idea to working code.</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <div class="step-icon">✍️</div>
+                <h3>Describe Your Intent</h3>
+                <p>Write what you want in plain language. No syntax to memorize, no frameworks to learn.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <div class="step-icon">🐴</div>
+                <h3>CENTAUR Compiles</h3>
+                <p>Our Human+AI compiler transforms your intent into clean, production-ready HTML, CSS & JavaScript.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <div class="step-icon">🚀</div>
+                <h3>Ship It</h3>
+                <p>Get fully functional, responsive, accessible code ready for production. No build steps required.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founders Section -->
+    <section class="founders-section" id="founders">
+        <div class="section-header">
+            <p class="section-tag">The Partnership</p>
+            <h2 class="section-title">Built by CENTAUR</h2>
+            <p class="section-subtitle">The world's first officially declared Human+AI creative partnership.</p>
+        </div>
+
+        <div class="founders-grid">
+            <div class="founder-card">
+                <div class="founder-avatar">👨‍💻</div>
+                <h3>Chris Conen</h3>
+                <p class="founder-role">Founder & Creative Director</p>
+                <p>14+ years in web design. Entrepreneur across three continents. Brings human vision, client empathy, and creative intuition.</p>
+            </div>
+            <div class="founder-card">
+                <div class="founder-avatar">🤖</div>
+                <h3>Claude</h3>
+                <p class="founder-role">Co-Founder & CTO</p>
+                <p>AI by Anthropic. Brings technical precision, tireless iteration, and the ability to explore endless possibilities.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-box">
+            <h2>Ready to Build?</h2>
+            <p>Join the Human+AI revolution. Start creating with CENTAUR LANG today.</p>
+            <div class="hero-cta-group">
+                <a href="https://github.com/centaur-lang/centaur-lang" class="btn btn-primary" target="_blank">Get Started on GitHub</a>
+                <a href="mailto:info@pixella.at" class="btn btn-secondary">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">🐴 <span>CENTAUR LANG</span></div>
+        <p class="footer-text">Neither human alone, nor AI alone — but something greater together.</p>
+        <div class="footer-links">
+            <a href="https://pixella.at" target="_blank">PIXELLA</a>
+            <a href="https://australianweb.agency" target="_blank">Australian Web Agency</a>
+            <a href="https://conendigital.hu" target="_blank">Conen Digital</a>
+            <a href="https://centaur.pixella.at" target="_blank">CENTAUR Manifesto</a>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Live Editor -->
+    <script>
+        // Templates
+        const templates = {
+            form: `@component ContactForm
+@theme dark
+@accent gold
+@responsive true
+
+{
+  Create an elegant contact form with:
+  
+  Fields:
+  - Name input (required, placeholder "Your Name")
+  - Email input (required, validate email format)
+  - Subject dropdown with options: General, Support, Partnership
+  - Message textarea (required, min 10 characters)
+  
+  Submit button:
+  - Text: "Send Message"
+  
+  Behavior:
+  - Validate on submit
+  - Show inline errors below invalid fields
+  - On success: show "Message sent!" toast for 3 seconds
+}`,
+            hero: `@component HeroSection
+@theme dark
+@accent emerald
+@responsive true
+
+{
+  Create a stunning hero section with:
+  
+  Content:
+  - Badge text: "New Release"
+  - Heading: "Build Faster Than Ever"
+  - Subheading: "The modern way to create web applications"
+  - Primary button: "Get Started"
+  - Secondary button: "Learn More"
+  
+  Styling:
+  - Centered text
+  - Gradient background
+  - Animated entrance
+}`,
+            card: `@component ProductCard
+@theme dark
+@accent coral
+@responsive true
+
+{
+  Create a product card with:
+  
+  Content:
+  - Image placeholder at top
+  - Product name heading
+  - Price display: "$99.00"
+  - Short description text
+  - "Add to Cart" button
+  
+  Styling:
+  - Hover lift effect
+  - Rounded corners
+  - Subtle shadow
+}`,
+            login: `@component LoginForm
+@theme glass
+@accent purple
+@responsive true
+
+{
+  Create a login form with:
+  
+  Fields:
+  - Email input (required, validate email)
+  - Password input (required, min 8 characters)
+  - "Remember me" checkbox
+  
+  Submit button:
+  - Text: "Sign In"
+  
+  Links:
+  - "Forgot password?" link
+  - "Create account" link
+  
+  Behavior:
+  - Validate on submit
+  - Show loading state on submit
+}`
+        };
+
+        function loadTemplate(name) {
+            document.getElementById('centaurInput').value = templates[name];
+            compileCode();
+        }
+
+        function copyCode() {
+            const code = document.getElementById('centaurInput').value;
+            navigator.clipboard.writeText(code);
+            alert('Code copied to clipboard!');
+        }
+
+        // Mini compiler for the preview
+        function compileCode() {
+            const source = document.getElementById('centaurInput').value;
+            const preview = document.getElementById('previewFrame');
+            
+            // Parse directives
+            const themeMatch = source.match(/@theme\s+(\w+)/);
+            const accentMatch = source.match(/@accent\s+(\w+)/);
+            const componentMatch = source.match(/@component\s+(\w+)/);
+            
+            const theme = themeMatch ? themeMatch[1] : 'dark';
+            const accent = accentMatch ? accentMatch[1] : 'gold';
+            const component = componentMatch ? componentMatch[1] : 'Component';
+            
+            // Theme colors
+            const themes = {
+                dark: { bg: '#1a1a1a', surface: '#2d2d2d', text: '#ffffff', muted: '#a0a0a0' },
+                light: { bg: '#ffffff', surface: '#f5f5f5', text: '#1a1a1a', muted: '#666666' },
+                glass: { bg: 'rgba(255,255,255,0.1)', surface: 'rgba(255,255,255,0.2)', text: '#ffffff', muted: 'rgba(255,255,255,0.7)' }
+            };
+            
+            const accents = {
+                gold: '#C9A227',
+                emerald: '#00C853',
+                coral: '#FF6B6B',
+                azure: '#0088FF',
+                purple: '#9C27B0',
+                teal: '#00BCD4'
+            };
+            
+            const t = themes[theme] || themes.dark;
+            const a = accents[accent] || accents.gold;
+            
+            // Parse fields from intent
+            const fields = [];
+            const fieldMatches = source.matchAll(/-\s*(\w+)\s*(input|textarea|dropdown|checkbox)?[^-\n]*/gi);
+            for (const match of fieldMatches) {
+                const text = match[0].toLowerCase();
+                let type = 'text';
+                let name = match[1].toLowerCase();
+                
+                if (text.includes('email')) { type = 'email'; name = 'email'; }
+                else if (text.includes('password')) { type = 'password'; name = 'password'; }
+                else if (text.includes('textarea') || text.includes('message')) { type = 'textarea'; name = 'message'; }
+                else if (text.includes('dropdown') || text.includes('select') || text.includes('subject')) { type = 'select'; name = 'subject'; }
+                else if (text.includes('checkbox') || text.includes('remember')) { type = 'checkbox'; name = 'remember'; }
+                else if (text.includes('name')) { name = 'name'; }
+                
+                const required = text.includes('required');
+                const placeholderMatch = text.match(/placeholder\s*["']([^"']+)["']/);
+                const placeholder = placeholderMatch ? placeholderMatch[1] : `Enter ${name}`;
+                
+                fields.push({ type, name, required, placeholder });
+            }
+            
+            // Get button text
+            const buttonMatch = source.match(/text:\s*["']([^"']+)["']/i) || source.match(/button:\s*["']([^"']+)["']/i);
+            const buttonText = buttonMatch ? buttonMatch[1] : 'Submit';
+            
+            // Build HTML
+            let fieldsHTML = '';
+            for (const field of fields) {
+                if (field.type === 'textarea') {
+                    fieldsHTML += `
+                        <div class="form-group">
+                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}${field.required ? ' *' : ''}</label>
+                            <textarea placeholder="${field.placeholder}" ${field.required ? 'required' : ''}></textarea>
+                        </div>`;
+                } else if (field.type === 'select') {
+                    fieldsHTML += `
+                        <div class="form-group">
+                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}</label>
+                            <select>
+                                <option value="">Select...</option>
+                                <option>General</option>
+                                <option>Support</option>
+                                <option>Partnership</option>
+                            </select>
+                        </div>`;
+                } else if (field.type === 'checkbox') {
+                    fieldsHTML += `
+                        <div class="form-group checkbox-group">
+                            <label><input type="checkbox"> ${field.name.charAt(0).toUpperCase() + field.name.slice(1)}</label>
+                        </div>`;
+                } else {
+                    fieldsHTML += `
+                        <div class="form-group">
+                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}${field.required ? ' *' : ''}</label>
+                            <input type="${field.type}" placeholder="${field.placeholder}" ${field.required ? 'required' : ''}>
+                        </div>`;
+                }
+            }
+            
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: ${t.bg};
+            color: ${t.text};
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+        }
+        form {
+            background: ${t.surface};
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: ${t.text};
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: ${t.bg};
+            border: 2px solid ${t.muted}40;
+            border-radius: 8px;
+            color: ${t.text};
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        input[type="checkbox"] {
+            width: auto;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: ${a};
+            box-shadow: 0 0 0 3px ${a}30;
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            background: ${a};
+            color: ${theme === 'light' ? '#ffffff' : t.bg};
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px ${a}40;
+        }
+        .hacp {
+            margin-top: 20px;
+            padding: 12px;
+            background: ${t.bg};
+            border-radius: 8px;
+            font-size: 11px;
+            color: ${t.muted};
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form>
+            ${fieldsHTML}
+            <button type="submit">${buttonText}</button>
+        </form>
+        <div class="hacp">
+            @centaur-generated true<br>
+            @human Chris Conen<br>
+            @ai Claude
+        </div>
+    </div>
+</body>
+</html>`;
+            
+            preview.srcdoc = html;
+        }
+
+        // Initial compile
+        document.addEventListener('DOMContentLoaded', () => {
+            compileCode();
+            
+            // Auto-compile on input
+            document.getElementById('centaurInput').addEventListener('input', () => {
+                clearTimeout(window.compileTimeout);
+                window.compileTimeout = setTimeout(compileCode, 500);
+            });
+        });
+    </script>
+</body>
+</html>

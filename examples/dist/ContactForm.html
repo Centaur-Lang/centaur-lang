@@ -1,0 +1,75 @@
+<!--
+    @centaur-generated true
+    @centaur-version 0.1.0
+    @component ContactForm
+    @human Chris Conen - specification, intent
+    @ai Claude - implementation
+    @timestamp 2025-12-27T06:20:43.223Z
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ContactForm | CENTAUR Generated</title>
+    <link rel="stylesheet" href="ContactForm.css">
+</head>
+<body>
+    <div class="centaur-form-container">
+        <form class="centaur-form" id="centaurForm" novalidate>
+            <div class="form-group">
+                <label for="field-name">Name *</label>
+                <input 
+                    type="text" 
+                    id="field-name" 
+                    name="name" 
+                    placeholder="Your Name"
+                    required
+                />
+                <span class="error-message" id="field-name-error"></span>
+            </div>
+            <div class="form-group">
+                <label for="field-email">Email *</label>
+                <input 
+                    type="email" 
+                    id="field-email" 
+                    name="email" 
+                    placeholder="Enter your email"
+                    required
+                />
+                <span class="error-message" id="field-email-error"></span>
+            </div>
+            <div class="form-group">
+                <label for="field-select">Select</label>
+                <select id="field-select" name="select" >
+                    <option value="">Select Select</option>
+                    <option value="general">General</option>
+                    <option value="support">Support</option>
+                    <option value="partnership">Partnership</option>
+                    <option value="feedback">Feedback</option>
+                </select>
+                <span class="error-message" id="field-select-error"></span>
+            </div>
+            <div class="form-group">
+                <label for="field-message">Message *</label>
+                <textarea 
+                    id="field-message" 
+                    name="message" 
+                    placeholder="Write your message here..."
+                    required
+                    minlength="10"
+                ></textarea>
+                <span class="error-message" id="field-message-error"></span>
+            </div>
+            <button type="submit" class="submit-button">
+                <span class="button-text">Send Message</span>
+                <span class="button-loading" style="display: none;">Sending...</span>
+            </button>
+        </form>
+        
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="ContactForm.js"></script>
+</body>
+</html>

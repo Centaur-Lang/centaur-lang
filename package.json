@@ -1,0 +1,69 @@
+{
+  "name": "centaur-lang",
+  "version": "0.1.0",
+  "description": "The world's first Human+AI programming language. Transform natural language into production-ready code.",
+  "main": "compiler.js",
+  "bin": {
+    "centaur": "./bin/centaur.js"
+  },
+  "scripts": {
+    "test": "node test/test.js",
+    "compile": "node bin/centaur.js compile",
+    "example": "node bin/centaur.js compile examples/ContactForm.centaur examples/dist"
+  },
+  "keywords": [
+    "centaur",
+    "human-ai",
+    "ai",
+    "programming-language",
+    "natural-language",
+    "code-generator",
+    "html-generator",
+    "css-generator",
+    "javascript-generator",
+    "no-code",
+    "low-code",
+    "web-development",
+    "frontend",
+    "anthropic",
+    "claude"
+  ],
+  "author": {
+    "name": "CENTAUR Partnership",
+    "url": "https://centaur-lang.dev"
+  },
+  "contributors": [
+    {
+      "name": "Chris Conen",
+      "role": "Human - Founder & Creative Director",
+      "url": "https://pixella.at"
+    },
+    {
+      "name": "Claude",
+      "role": "AI - Co-Founder & CTO",
+      "url": "https://anthropic.com"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/centaur-lang/centaur-lang.git"
+  },
+  "bugs": {
+    "url": "https://github.com/centaur-lang/centaur-lang/issues"
+  },
+  "homepage": "https://centaur-lang.dev",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "compiler.js",
+    "bin/",
+    "lib/",
+    "templates/",
+    "README.md",
+    "LICENSE",
+    "SPECIFICATION.md"
+  ],
+  "preferGlobal": true
+}
