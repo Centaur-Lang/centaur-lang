@@ -2,7 +2,7 @@
     @centaur-generated false
     @human Chris Conen - vision, creative direction
     @ai Claude - full implementation
-    @project CENTAUR LANG Demo Page
+    @project CENTAUR LANG Demo Page v2
     @timestamp 2025-12-27
 -->
 <!DOCTYPE html>
@@ -10,794 +10,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CENTAUR LANG — The Language of Human+AI Collaboration</title>
+    <title>CENTAUR LANG — The World's First Human+AI Programming Language</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-void: #0a0a0b;
-            --bg-surface: #111113;
-            --bg-elevated: #1a1a1d;
-            --bg-hover: #222226;
-            --gold: #C9A227;
-            --gold-light: #E8C547;
-            --gold-glow: rgba(201, 162, 39, 0.3);
-            --gold-subtle: rgba(201, 162, 39, 0.1);
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0a5;
-            --text-muted: #606065;
-            --border: #2a2a2f;
-            --success: #00C853;
-            --error: #FF4444;
-            --gradient-gold: linear-gradient(135deg, #C9A227 0%, #E8C547 50%, #C9A227 100%);
-            --font-display: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-display);
-            background: var(--bg-void);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* ============================================
-           ANIMATED BACKGROUND
-           ============================================ */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
-            background-image: 
-                linear-gradient(var(--border) 1px, transparent 1px),
-                linear-gradient(90deg, var(--border) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-        }
-
-        .glow-orb {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 0;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .glow-orb-1 { top: -200px; right: -200px; }
-        .glow-orb-2 { bottom: -300px; left: -200px; animation-delay: -10s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-50px, 50px) scale(1.1); }
-        }
-
-        /* ============================================
-           NAVIGATION
-           ============================================ */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 10, 11, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.3rem;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .nav-logo-icon {
-            font-size: 1.8rem;
-        }
-
-        .nav-logo span {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        .nav-cta {
-            background: var(--gradient-gold);
-            color: var(--bg-void);
-            padding: 10px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px var(--gold-glow);
-        }
-
-        /* ============================================
-           HERO SECTION
-           ============================================ */
-        .hero {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 140px 40px 80px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--gold-subtle);
-            border: 1px solid var(--gold);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            color: var(--gold);
-            margin-bottom: 30px;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .hero-badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--gold);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 24px;
-            animation: fadeInUp 0.8s ease 0.1s both;
-        }
-
-        .hero h1 .highlight {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin-bottom: 50px;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .hero-cta-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            animation: fadeInUp 0.8s ease 0.3s both;
-        }
-
-        .btn {
-            padding: 16px 32px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            font-family: var(--font-display);
-        }
-
-        .btn-primary {
-            background: var(--gradient-gold);
-            color: var(--bg-void);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px var(--gold-glow);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--gold);
-            color: var(--gold);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ============================================
-           LIVE EDITOR SECTION
-           ============================================ */
-        .editor-section {
-            position: relative;
-            z-index: 1;
-            padding: 100px 40px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-
-        .section-tag {
-            color: var(--gold);
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .section-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .editor-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: var(--bg-surface);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
-        }
-
-        .editor-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 24px;
-            background: var(--bg-elevated);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .editor-tabs {
-            display: flex;
-            gap: 8px;
-        }
-
-        .editor-tab {
-            padding: 8px 16px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .editor-tab.active {
-            background: var(--gold-subtle);
-            color: var(--gold);
-        }
-
-        .editor-tab:hover:not(.active) {
-            background: var(--bg-hover);
-        }
-
-        .editor-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .editor-btn {
-            padding: 8px 16px;
-            background: var(--gold);
-            color: var(--bg-void);
-            border: none;
-            border-radius: 6px;
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .editor-btn:hover {
-            background: var(--gold-light);
-            transform: translateY(-1px);
-        }
-
-        .editor-btn-secondary {
-            background: var(--bg-hover);
-            color: var(--text-primary);
-        }
-
-        .editor-btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .editor-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 500px;
-        }
-
-        .editor-pane {
-            position: relative;
-        }
-
-        .editor-pane-header {
-            padding: 12px 20px;
-            background: var(--bg-elevated);
-            border-bottom: 1px solid var(--border);
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .editor-input {
-            width: 100%;
-            height: calc(100% - 44px);
-            min-height: 456px;
-            background: var(--bg-surface);
-            border: none;
-            padding: 20px;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            line-height: 1.7;
-            color: var(--text-primary);
-            resize: none;
-            outline: none;
-        }
-
-        .editor-input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .preview-pane {
-            border-left: 1px solid var(--border);
-            background: var(--bg-void);
-        }
-
-        .preview-frame {
-            width: 100%;
-            height: calc(100% - 44px);
-            min-height: 456px;
-            border: none;
-            background: #1a1a1a;
-        }
-
-        /* Template buttons */
-        .template-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .template-btn {
-            padding: 10px 20px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            font-family: var(--font-display);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .template-btn:hover {
-            border-color: var(--gold);
-            color: var(--gold);
-            background: var(--gold-subtle);
-        }
-
-        /* ============================================
-           HOW IT WORKS
-           ============================================ */
-        .how-section {
-            position: relative;
-            z-index: 1;
-            padding: 120px 40px;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .step-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 40px;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .step-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .step-number {
-            position: absolute;
-            top: -20px;
-            left: 30px;
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-gold);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: var(--bg-void);
-            font-size: 1.1rem;
-        }
-
-        .step-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-
-        .step-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-        }
-
-        .step-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* ============================================
-           FOUNDERS SECTION
-           ============================================ */
-        .founders-section {
-            position: relative;
-            z-index: 1;
-            padding: 120px 40px;
-            background: var(--bg-surface);
-        }
-
-        .founders-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 60px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .founder-card {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .founder-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            background: var(--bg-elevated);
-            border: 3px solid var(--gold);
-        }
-
-        .founder-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .founder-role {
-            color: var(--gold);
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .founder-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* ============================================
-           CTA SECTION
-           ============================================ */
-        .cta-section {
-            position: relative;
-            z-index: 1;
-            padding: 120px 40px;
-            text-align: center;
-        }
-
-        .cta-box {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 60px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-gold);
-        }
-
-        .cta-box h2 {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-
-        .cta-box p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        footer {
-            position: relative;
-            z-index: 1;
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-brand {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .footer-brand span {
-            background: var(--gradient-gold);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .footer-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--gold);
-        }
+            --bg-void: #050506; --bg-surface: #0d0d0f; --bg-elevated: #141416;
+            --gold: #D4AF37; --gold-light: #F4CF57; --gold-glow: rgba(212, 175, 55, 0.4);
+            --gold-subtle: rgba(212, 175, 55, 0.1);
+            --text-primary: #fff; --text-secondary: #9a9aa0; --text-muted: #55555a;
+            --border: #252528; --success: #00D26A;
+            --gradient-gold: linear-gradient(135deg, #D4AF37 0%, #F4CF57 50%, #D4AF37 100%);
+            --font-display: 'Outfit', sans-serif; --font-mono: 'JetBrains Mono', monospace;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-display); background: var(--bg-void); color: var(--text-primary); line-height: 1.6; overflow-x: hidden; }
+
+        .bg-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.3;
+            background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 80px 80px; mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%); }
+        .glow-orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
+        .glow-orb-1 { width: 800px; height: 800px; top: -400px; right: -300px; background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%); animation: float1 25s ease-in-out infinite; }
+        .glow-orb-2 { width: 600px; height: 600px; bottom: -200px; left: -200px; background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%); animation: float2 20s ease-in-out infinite; }
+        @keyframes float1 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-50px, 50px); } }
+        @keyframes float2 { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(50px, -50px); } }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 40px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 5, 6, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--text-primary); }
+        .nav-logo-icon { width: 42px; height: 42px; background: var(--gradient-gold); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .nav-logo-text .brand { background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 1.3rem; }
+        .nav-logo-text .tagline { font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links { display: flex; gap: 36px; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-cta { background: var(--gradient-gold); color: var(--bg-void); padding: 12px 28px; border-radius: 10px; text-decoration: none; font-weight: 700; transition: transform 0.3s, box-shadow 0.3s; }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 35px var(--gold-glow); }
+
+        .hero { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 160px 40px 100px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 10px; background: var(--gold-subtle); border: 1px solid var(--gold); padding: 10px 20px; border-radius: 100px; font-size: 0.9rem; color: var(--gold); margin-bottom: 36px; animation: fadeInUp 0.8s ease; font-weight: 600; }
+        .hero h1 { font-size: clamp(3rem, 9vw, 6rem); font-weight: 800; line-height: 1.05; margin-bottom: 28px; animation: fadeInUp 0.8s ease 0.1s both; letter-spacing: -2px; }
+        .hero h1 .line2 { background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-subtitle { font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--text-secondary); max-width: 700px; margin-bottom: 50px; animation: fadeInUp 0.8s ease 0.2s both; }
+        .hero-cta-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; animation: fadeInUp 0.8s ease 0.3s both; }
+        .btn { padding: 18px 36px; border-radius: 12px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-family: var(--font-display); display: inline-flex; align-items: center; gap: 10px; }
+        .btn-primary { background: var(--gradient-gold); color: var(--bg-void); box-shadow: 0 8px 30px var(--gold-glow); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 50px var(--gold-glow); }
+        .btn-secondary { background: var(--bg-elevated); color: var(--text-primary); border: 2px solid var(--border); }
+        .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-tag { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin-bottom: 20px; }
+        .section-subtitle { color: var(--text-secondary); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        .editor-section { position: relative; z-index: 1; padding: 100px 40px; }
+        .editor-container { max-width: 1300px; margin: 0 auto; background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.5); }
+        .editor-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: var(--bg-elevated); border-bottom: 1px solid var(--border); }
+        .editor-tab { padding: 10px 18px; background: var(--gold-subtle); border: none; color: var(--gold); font-family: var(--font-mono); font-size: 0.85rem; border-radius: 8px; }
+        .editor-actions { display: flex; gap: 12px; }
+        .editor-btn { padding: 10px 20px; background: var(--gold); color: var(--bg-void); border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; }
+        .editor-btn:hover { background: var(--gold-light); transform: translateY(-2px); }
+        .editor-btn-secondary { background: #222; color: #fff; }
+        .editor-body { display: grid; grid-template-columns: 1fr 1fr; min-height: 480px; }
+        .editor-pane-header { padding: 12px 20px; background: var(--bg-elevated); border-bottom: 1px solid var(--border); font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .editor-input { width: 100%; height: 430px; background: var(--bg-surface); border: none; padding: 20px; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.8; color: var(--text-primary); resize: none; outline: none; }
+        .preview-pane { border-left: 1px solid var(--border); }
+        .preview-frame { width: 100%; height: 430px; border: none; background: #1a1a1a; }
+        .template-buttons { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
+        .template-btn { padding: 12px 24px; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 10px; color: var(--text-secondary); font-size: 0.95rem; cursor: pointer; transition: all 0.3s; }
+        .template-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+        .how-section { position: relative; z-index: 1; padding: 120px 40px; }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .step-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px; padding: 44px 32px; position: relative; transition: all 0.3s; }
+        .step-card:hover { border-color: var(--gold); transform: translateY(-6px); }
+        .step-number { position: absolute; top: -16px; left: 32px; width: 32px; height: 32px; background: var(--gradient-gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--bg-void); }
+        .step-icon { font-size: 2.8rem; margin-bottom: 20px; }
+        .step-card h3 { font-size: 1.3rem; margin-bottom: 12px; font-weight: 700; }
+        .step-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+
+        .themes-section { position: relative; z-index: 1; padding: 120px 40px; background: var(--bg-surface); }
+        .themes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 900px; margin: 0 auto; }
+        .theme-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px; padding: 20px; transition: all 0.3s; }
+        .theme-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+        .theme-preview { height: 100px; border-radius: 10px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; }
+        .theme-preview.dark { background: linear-gradient(135deg, #1a1a1a, #2d2d2d); }
+        .theme-preview.light { background: linear-gradient(135deg, #fff, #f0f0f0); }
+        .theme-preview.glass { background: linear-gradient(135deg, rgba(100,100,150,0.4), rgba(150,150,200,0.3)); }
+        .theme-preview-form { width: 75%; padding: 10px; border-radius: 6px; }
+        .theme-preview.dark .theme-preview-form { background: #2d2d2d; }
+        .theme-preview.light .theme-preview-form { background: #fff; }
+        .theme-preview.glass .theme-preview-form { background: rgba(255,255,255,0.15); }
+        .theme-preview-input { height: 20px; border-radius: 4px; margin-bottom: 6px; }
+        .theme-preview.dark .theme-preview-input { background: #1a1a1a; }
+        .theme-preview.light .theme-preview-input { background: #f5f5f5; }
+        .theme-preview.glass .theme-preview-input { background: rgba(255,255,255,0.1); }
+        .theme-preview-btn { height: 24px; border-radius: 4px; }
+        .theme-preview-btn.gold { background: var(--gold); }
+        .theme-preview-btn.emerald { background: #00C853; }
+        .theme-preview-btn.coral { background: #FF6B6B; }
+        .theme-card h4 { font-size: 1rem; margin-bottom: 6px; }
+        .theme-card-code { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); }
+        .theme-card-code span { color: var(--gold); }
+
+        .founders-section { position: relative; z-index: 1; padding: 120px 40px; }
+        .founders-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px; max-width: 900px; margin: 0 auto; }
+        .founder-card { text-align: center; padding: 44px 32px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 20px; transition: all 0.3s; }
+        .founder-card:hover { border-color: var(--gold); transform: translateY(-6px); }
+        .founder-avatar { width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; background: var(--bg-elevated); border: 4px solid var(--gold); overflow: hidden; box-shadow: 0 10px 40px var(--gold-glow); }
+        .founder-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .founder-card h3 { font-size: 1.5rem; margin-bottom: 8px; }
+        .founder-role { color: var(--gold); font-weight: 700; margin-bottom: 16px; }
+        .founder-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
+
+        .cta-section { position: relative; z-index: 1; padding: 120px 40px; background: var(--bg-surface); }
+        .cta-box { max-width: 800px; margin: 0 auto; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 28px; padding: 70px 50px; text-align: center; position: relative; overflow: hidden; }
+        .cta-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gradient-gold); }
+        .cta-box h2 { font-size: 2.5rem; margin-bottom: 16px; font-weight: 800; }
+        .cta-box p { color: var(--text-secondary); font-size: 1.15rem; margin-bottom: 40px; }
+
+        footer { position: relative; z-index: 1; padding: 50px 40px; text-align: center; border-top: 1px solid var(--border); }
+        .footer-brand { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; }
+        .footer-brand span { background: var(--gradient-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .footer-text { color: var(--text-muted); font-size: 0.9rem; font-style: italic; }
+        .footer-links { margin-top: 24px; display: flex; justify-content: center; gap: 36px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--gold); }
+        .footer-copyright { margin-top: 24px; color: var(--text-muted); font-size: 0.8rem; }
 
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
         @media (max-width: 1024px) {
-            .editor-body {
-                grid-template-columns: 1fr;
-            }
-            
-            .preview-pane {
-                border-left: none;
-                border-top: 1px solid var(--border);
-            }
-
-            .steps-grid {
-                grid-template-columns: 1fr;
-                max-width: 500px;
-            }
-
-            .founders-grid {
-                grid-template-columns: 1fr;
-            }
+            .editor-body, .steps-grid, .themes-grid, .founders-grid { grid-template-columns: 1fr; }
+            .preview-pane { border-left: none; border-top: 1px solid var(--border); }
+            .steps-grid, .themes-grid, .founders-grid { max-width: 500px; }
         }
-
         @media (max-width: 768px) {
-            nav {
-                padding: 15px 20px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero {
-                padding: 120px 20px 60px;
-            }
-
-            .editor-section,
-            .how-section,
-            .founders-section,
-            .cta-section {
-                padding: 60px 20px;
-            }
-
-            .editor-toolbar {
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .cta-box {
-                padding: 40px 24px;
-            }
+            nav { padding: 12px 20px; }
+            .nav-links { display: none; }
+            .hero { padding: 120px 20px 60px; }
+            .editor-section, .how-section, .themes-section, .founders-section, .cta-section { padding: 60px 20px; }
+            .editor-toolbar { flex-direction: column; gap: 12px; }
+            .cta-box { padding: 50px 24px; }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
     <div class="bg-grid"></div>
     <div class="glow-orb glow-orb-1"></div>
     <div class="glow-orb glow-orb-2"></div>
 
-    <!-- Navigation -->
     <nav>
         <a href="#" class="nav-logo">
-            <span class="nav-logo-icon">🐴</span>
-            <span>CENTAUR LANG</span>
+            <div class="nav-logo-icon">🐴</div>
+            <div class="nav-logo-text">
+                <div class="brand">CENTAUR LANG</div>
+                <div class="tagline">Human+AI Programming</div>
+            </div>
         </a>
         <ul class="nav-links">
-            <li><a href="#editor">Try It</a></li>
+            <li><a href="#editor">Playground</a></li>
             <li><a href="#how">How It Works</a></li>
+            <li><a href="#themes">Themes</a></li>
             <li><a href="#founders">Founders</a></li>
-            <li><a href="https://github.com/centaur-lang/centaur-lang" target="_blank">GitHub</a></li>
+            <li><a href="https://github.com/Centaur-Lang/centaur-lang" target="_blank">GitHub</a></li>
         </ul>
-        <a href="#editor" class="nav-cta">Get Started</a>
+        <a href="#editor" class="nav-cta">Try It Now</a>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            World's First Human+AI Programming Language
-        </div>
+        <div class="hero-badge">🌟 World's First Human+AI Programming Language</div>
         <h1>
-            Describe it.<br>
-            <span class="highlight">We'll build it.</span>
+            <span class="line1">Describe Your Vision.</span>
+            <span class="line2">We Build The Code.</span>
         </h1>
-        <p class="hero-subtitle">
-            CENTAUR LANG transforms natural language into production-ready code. 
-            No frameworks. No complexity. Just describe what you want.
-        </p>
+        <p class="hero-subtitle">CENTAUR LANG transforms natural language into production-ready HTML, CSS, and JavaScript. No frameworks. No complexity. Just describe what you want.</p>
         <div class="hero-cta-group">
-            <a href="#editor" class="btn btn-primary">Try Live Editor</a>
-            <a href="https://github.com/centaur-lang/centaur-lang" class="btn btn-secondary" target="_blank">View on GitHub</a>
+            <a href="#editor" class="btn btn-primary">▶ Try Live Editor</a>
+            <a href="https://github.com/Centaur-Lang/centaur-lang" class="btn btn-secondary" target="_blank">⭐ Star on GitHub</a>
         </div>
     </section>
 
-    <!-- Live Editor Section -->
     <section class="editor-section" id="editor">
         <div class="section-header">
             <p class="section-tag">Live Playground</p>
             <h2 class="section-title">See It In Action</h2>
             <p class="section-subtitle">Write natural language on the left. Watch it transform into working code on the right.</p>
         </div>
-
         <div class="editor-container">
             <div class="editor-toolbar">
-                <div class="editor-tabs">
-                    <button class="editor-tab active">ContactForm.centaur</button>
-                </div>
+                <button class="editor-tab">ContactForm.centaur</button>
                 <div class="editor-actions">
-                    <button class="editor-btn-secondary editor-btn" onclick="copyCode()">📋 Copy</button>
+                    <button class="editor-btn editor-btn-secondary" onclick="copyCode()">📋 Copy</button>
                     <button class="editor-btn" onclick="compileCode()">▶ Compile</button>
                 </div>
             </div>
             <div class="editor-body">
                 <div class="editor-pane">
                     <div class="editor-pane-header">📝 CENTAUR Source</div>
-                    <textarea class="editor-input" id="centaurInput" placeholder="Write your CENTAUR code here...">@component ContactForm
+                    <textarea class="editor-input" id="centaurInput">@component ContactForm
 @theme dark
 @accent gold
 @responsive true
@@ -826,7 +238,6 @@
                 </div>
             </div>
         </div>
-
         <div class="template-buttons">
             <button class="template-btn" onclick="loadTemplate('form')">📝 Contact Form</button>
             <button class="template-btn" onclick="loadTemplate('hero')">🚀 Hero Section</button>
@@ -835,14 +246,12 @@
         </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how-section" id="how">
         <div class="section-header">
             <p class="section-tag">The Process</p>
             <h2 class="section-title">How It Works</h2>
-            <p class="section-subtitle">Three simple steps from idea to working code.</p>
+            <p class="section-subtitle">Three simple steps from idea to production-ready code.</p>
         </div>
-
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-number">1</div>
@@ -854,31 +263,74 @@
                 <div class="step-number">2</div>
                 <div class="step-icon">🐴</div>
                 <h3>CENTAUR Compiles</h3>
-                <p>Our Human+AI compiler transforms your intent into clean, production-ready HTML, CSS & JavaScript.</p>
+                <p>Our Human+AI compiler transforms your intent into clean, production-ready code.</p>
             </div>
             <div class="step-card">
                 <div class="step-number">3</div>
                 <div class="step-icon">🚀</div>
                 <h3>Ship It</h3>
-                <p>Get fully functional, responsive, accessible code ready for production. No build steps required.</p>
+                <p>Get fully functional, responsive, accessible code ready for production.</p>
             </div>
         </div>
     </section>
 
-    <!-- Founders Section -->
+    <section class="themes-section" id="themes">
+        <div class="section-header">
+            <p class="section-tag">Customization</p>
+            <h2 class="section-title">Themes & Colors</h2>
+            <p class="section-subtitle">Beautiful themes and accent colors, ready to use.</p>
+        </div>
+        <div class="themes-grid">
+            <div class="theme-card">
+                <div class="theme-preview dark">
+                    <div class="theme-preview-form">
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-btn gold"></div>
+                    </div>
+                </div>
+                <h4>Dark Theme</h4>
+                <div class="theme-card-code"><span>@theme</span> dark <span>@accent</span> gold</div>
+            </div>
+            <div class="theme-card">
+                <div class="theme-preview light">
+                    <div class="theme-preview-form">
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-btn emerald"></div>
+                    </div>
+                </div>
+                <h4>Light Theme</h4>
+                <div class="theme-card-code"><span>@theme</span> light <span>@accent</span> emerald</div>
+            </div>
+            <div class="theme-card">
+                <div class="theme-preview glass">
+                    <div class="theme-preview-form">
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-input"></div>
+                        <div class="theme-preview-btn coral"></div>
+                    </div>
+                </div>
+                <h4>Glass Theme</h4>
+                <div class="theme-card-code"><span>@theme</span> glass <span>@accent</span> coral</div>
+            </div>
+        </div>
+    </section>
+
     <section class="founders-section" id="founders">
         <div class="section-header">
             <p class="section-tag">The Partnership</p>
             <h2 class="section-title">Built by CENTAUR</h2>
             <p class="section-subtitle">The world's first officially declared Human+AI creative partnership.</p>
         </div>
-
         <div class="founders-grid">
             <div class="founder-card">
-                <div class="founder-avatar">👨‍💻</div>
+                <div class="founder-avatar">
+                    <img src="https://australianweb.agency/img/website_design_sydney_team.webp" alt="Chris Conen">
+                </div>
                 <h3>Chris Conen</h3>
                 <p class="founder-role">Founder & Creative Director</p>
-                <p>14+ years in web design. Entrepreneur across three continents. Brings human vision, client empathy, and creative intuition.</p>
+                <p>14+ years in web design. Entrepreneur across three continents. Brings human vision, creativity, and relentless drive to innovate.</p>
             </div>
             <div class="founder-card">
                 <div class="founder-avatar">🤖</div>
@@ -889,347 +341,75 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section">
         <div class="cta-box">
             <h2>Ready to Build?</h2>
-            <p>Join the Human+AI revolution. Start creating with CENTAUR LANG today.</p>
+            <p>Join the Human+AI revolution. Start creating with CENTAUR LANG today — it's free and open source.</p>
             <div class="hero-cta-group">
-                <a href="https://github.com/centaur-lang/centaur-lang" class="btn btn-primary" target="_blank">Get Started on GitHub</a>
-                <a href="mailto:info@pixella.at" class="btn btn-secondary">Contact Us</a>
+                <a href="https://github.com/Centaur-Lang/centaur-lang" class="btn btn-primary" target="_blank">⭐ Get Started on GitHub</a>
+                <a href="mailto:info@pixella.at" class="btn btn-secondary">📧 Contact Us</a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-brand">🐴 <span>CENTAUR LANG</span></div>
-        <p class="footer-text">Neither human alone, nor AI alone — but something greater together.</p>
+        <p class="footer-text">"Neither human alone, nor AI alone — but something greater together."</p>
         <div class="footer-links">
             <a href="https://pixella.at" target="_blank">PIXELLA</a>
             <a href="https://australianweb.agency" target="_blank">Australian Web Agency</a>
             <a href="https://conendigital.hu" target="_blank">Conen Digital</a>
             <a href="https://centaur.pixella.at" target="_blank">CENTAUR Manifesto</a>
         </div>
+        <p class="footer-copyright">© 2025 CENTAUR Partnership. MIT License.</p>
     </footer>
 
-    <!-- JavaScript for Live Editor -->
     <script>
-        // Templates
         const templates = {
-            form: `@component ContactForm
-@theme dark
-@accent gold
-@responsive true
-
-{
-  Create an elegant contact form with:
-  
-  Fields:
-  - Name input (required, placeholder "Your Name")
-  - Email input (required, validate email format)
-  - Subject dropdown with options: General, Support, Partnership
-  - Message textarea (required, min 10 characters)
-  
-  Submit button:
-  - Text: "Send Message"
-  
-  Behavior:
-  - Validate on submit
-  - Show inline errors below invalid fields
-  - On success: show "Message sent!" toast for 3 seconds
-}`,
-            hero: `@component HeroSection
-@theme dark
-@accent emerald
-@responsive true
-
-{
-  Create a stunning hero section with:
-  
-  Content:
-  - Badge text: "New Release"
-  - Heading: "Build Faster Than Ever"
-  - Subheading: "The modern way to create web applications"
-  - Primary button: "Get Started"
-  - Secondary button: "Learn More"
-  
-  Styling:
-  - Centered text
-  - Gradient background
-  - Animated entrance
-}`,
-            card: `@component ProductCard
-@theme dark
-@accent coral
-@responsive true
-
-{
-  Create a product card with:
-  
-  Content:
-  - Image placeholder at top
-  - Product name heading
-  - Price display: "$99.00"
-  - Short description text
-  - "Add to Cart" button
-  
-  Styling:
-  - Hover lift effect
-  - Rounded corners
-  - Subtle shadow
-}`,
-            login: `@component LoginForm
-@theme glass
-@accent purple
-@responsive true
-
-{
-  Create a login form with:
-  
-  Fields:
-  - Email input (required, validate email)
-  - Password input (required, min 8 characters)
-  - "Remember me" checkbox
-  
-  Submit button:
-  - Text: "Sign In"
-  
-  Links:
-  - "Forgot password?" link
-  - "Create account" link
-  
-  Behavior:
-  - Validate on submit
-  - Show loading state on submit
-}`
+            form: '@component ContactForm\n@theme dark\n@accent gold\n@responsive true\n\n{\n  Create an elegant contact form with:\n  \n  Fields:\n  - Name input (required, placeholder "Your Name")\n  - Email input (required, validate email format)\n  - Subject dropdown with options: General, Support, Partnership\n  - Message textarea (required, min 10 characters)\n  \n  Submit button:\n  - Text: "Send Message"\n  \n  Behavior:\n  - Validate on submit\n  - On success: show "Message sent!" toast\n}',
+            hero: '@component HeroSection\n@theme dark\n@accent emerald\n\n{\n  Create a hero section with:\n  \n  - Badge: "New Release"\n  - Heading: "Build Faster Than Ever"\n  - Subheading: "The modern way to create web apps"\n  - Primary button: "Get Started"\n  - Secondary button: "Learn More"\n}',
+            card: '@component ProductCard\n@theme dark\n@accent coral\n\n{\n  Create a product card with:\n  \n  - Image placeholder\n  - Product name heading\n  - Price: "$99.00"\n  - Description text\n  - "Add to Cart" button\n}',
+            login: '@component LoginForm\n@theme glass\n@accent purple\n\n{\n  Create a login form with:\n  \n  Fields:\n  - Email input (required, validate email)\n  - Password input (required, min 8 characters)\n  - "Remember me" checkbox\n  \n  Submit button: "Sign In"\n}'
         };
-
-        function loadTemplate(name) {
-            document.getElementById('centaurInput').value = templates[name];
-            compileCode();
-        }
-
-        function copyCode() {
-            const code = document.getElementById('centaurInput').value;
-            navigator.clipboard.writeText(code);
-            alert('Code copied to clipboard!');
-        }
-
-        // Mini compiler for the preview
+        function loadTemplate(name) { document.getElementById('centaurInput').value = templates[name]; compileCode(); }
+        function copyCode() { navigator.clipboard.writeText(document.getElementById('centaurInput').value); }
         function compileCode() {
             const source = document.getElementById('centaurInput').value;
-            const preview = document.getElementById('previewFrame');
-            
-            // Parse directives
             const themeMatch = source.match(/@theme\s+(\w+)/);
             const accentMatch = source.match(/@accent\s+(\w+)/);
-            const componentMatch = source.match(/@component\s+(\w+)/);
-            
             const theme = themeMatch ? themeMatch[1] : 'dark';
             const accent = accentMatch ? accentMatch[1] : 'gold';
-            const component = componentMatch ? componentMatch[1] : 'Component';
-            
-            // Theme colors
-            const themes = {
-                dark: { bg: '#1a1a1a', surface: '#2d2d2d', text: '#ffffff', muted: '#a0a0a0' },
-                light: { bg: '#ffffff', surface: '#f5f5f5', text: '#1a1a1a', muted: '#666666' },
-                glass: { bg: 'rgba(255,255,255,0.1)', surface: 'rgba(255,255,255,0.2)', text: '#ffffff', muted: 'rgba(255,255,255,0.7)' }
-            };
-            
-            const accents = {
-                gold: '#C9A227',
-                emerald: '#00C853',
-                coral: '#FF6B6B',
-                azure: '#0088FF',
-                purple: '#9C27B0',
-                teal: '#00BCD4'
-            };
-            
+            const themes = { dark: { bg: '#1a1a1a', surface: '#2d2d2d', text: '#fff', muted: '#888' }, light: { bg: '#fff', surface: '#f5f5f5', text: '#1a1a1a', muted: '#666' }, glass: { bg: '#1a1a2e', surface: 'rgba(255,255,255,0.15)', text: '#fff', muted: 'rgba(255,255,255,0.6)' } };
+            const accents = { gold: '#D4AF37', emerald: '#00C853', coral: '#FF6B6B', azure: '#0088FF', purple: '#9C27B0', teal: '#00BCD4' };
             const t = themes[theme] || themes.dark;
             const a = accents[accent] || accents.gold;
-            
-            // Parse fields from intent
             const fields = [];
             const fieldMatches = source.matchAll(/-\s*(\w+)\s*(input|textarea|dropdown|checkbox)?[^-\n]*/gi);
             for (const match of fieldMatches) {
                 const text = match[0].toLowerCase();
-                let type = 'text';
-                let name = match[1].toLowerCase();
-                
+                let type = 'text', name = match[1].toLowerCase();
                 if (text.includes('email')) { type = 'email'; name = 'email'; }
                 else if (text.includes('password')) { type = 'password'; name = 'password'; }
                 else if (text.includes('textarea') || text.includes('message')) { type = 'textarea'; name = 'message'; }
                 else if (text.includes('dropdown') || text.includes('select') || text.includes('subject')) { type = 'select'; name = 'subject'; }
                 else if (text.includes('checkbox') || text.includes('remember')) { type = 'checkbox'; name = 'remember'; }
                 else if (text.includes('name')) { name = 'name'; }
-                
-                const required = text.includes('required');
-                const placeholderMatch = text.match(/placeholder\s*["']([^"']+)["']/);
-                const placeholder = placeholderMatch ? placeholderMatch[1] : `Enter ${name}`;
-                
-                fields.push({ type, name, required, placeholder });
+                fields.push({ type, name, required: text.includes('required') });
             }
-            
-            // Get button text
             const buttonMatch = source.match(/text:\s*["']([^"']+)["']/i) || source.match(/button:\s*["']([^"']+)["']/i);
             const buttonText = buttonMatch ? buttonMatch[1] : 'Submit';
-            
-            // Build HTML
             let fieldsHTML = '';
-            for (const field of fields) {
-                if (field.type === 'textarea') {
-                    fieldsHTML += `
-                        <div class="form-group">
-                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}${field.required ? ' *' : ''}</label>
-                            <textarea placeholder="${field.placeholder}" ${field.required ? 'required' : ''}></textarea>
-                        </div>`;
-                } else if (field.type === 'select') {
-                    fieldsHTML += `
-                        <div class="form-group">
-                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}</label>
-                            <select>
-                                <option value="">Select...</option>
-                                <option>General</option>
-                                <option>Support</option>
-                                <option>Partnership</option>
-                            </select>
-                        </div>`;
-                } else if (field.type === 'checkbox') {
-                    fieldsHTML += `
-                        <div class="form-group checkbox-group">
-                            <label><input type="checkbox"> ${field.name.charAt(0).toUpperCase() + field.name.slice(1)}</label>
-                        </div>`;
-                } else {
-                    fieldsHTML += `
-                        <div class="form-group">
-                            <label>${field.name.charAt(0).toUpperCase() + field.name.slice(1)}${field.required ? ' *' : ''}</label>
-                            <input type="${field.type}" placeholder="${field.placeholder}" ${field.required ? 'required' : ''}>
-                        </div>`;
-                }
+            for (const f of fields) {
+                const label = f.name.charAt(0).toUpperCase() + f.name.slice(1);
+                if (f.type === 'textarea') fieldsHTML += '<div class="form-group"><label>' + label + '</label><textarea placeholder="Enter ' + f.name + '"></textarea></div>';
+                else if (f.type === 'select') fieldsHTML += '<div class="form-group"><label>' + label + '</label><select><option>General</option><option>Support</option><option>Partnership</option></select></div>';
+                else if (f.type === 'checkbox') fieldsHTML += '<div class="form-group checkbox"><label><input type="checkbox"> ' + label + '</label></div>';
+                else fieldsHTML += '<div class="form-group"><label>' + label + (f.required ? ' *' : '') + '</label><input type="' + f.type + '" placeholder="Enter ' + f.name + '"></div>';
             }
-            
-            const html = `<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: ${t.bg};
-            color: ${t.text};
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            const html = '<!DOCTYPE html><html><head><style>@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap");*{margin:0;padding:0;box-sizing:border-box}body{font-family:Outfit,sans-serif;background:' + t.bg + ';color:' + t.text + ';min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.form-container{width:100%;max-width:380px}form{background:' + t.surface + ';padding:32px;border-radius:16px;' + (theme === 'glass' ? 'backdrop-filter:blur(20px);' : '') + '}.form-group{margin-bottom:20px}.form-group.checkbox{display:flex;align-items:center}.form-group.checkbox label{display:flex;align-items:center;gap:8px;cursor:pointer}label{display:block;margin-bottom:8px;font-weight:600;font-size:14px}input,textarea,select{width:100%;padding:12px 14px;background:' + (theme === 'glass' ? 'rgba(255,255,255,0.1)' : t.bg) + ';border:2px solid ' + (theme === 'glass' ? 'rgba(255,255,255,0.15)' : 'transparent') + ';border-radius:8px;color:' + t.text + ';font-size:15px;font-family:inherit;transition:all .3s}input[type=checkbox]{width:auto}textarea{min-height:100px;resize:vertical}input:focus,textarea:focus,select:focus{outline:none;border-color:' + a + ';box-shadow:0 0 0 3px ' + a + '30}button{width:100%;padding:14px;background:' + a + ';color:#0a0a0a;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s}button:hover{transform:translateY(-2px);box-shadow:0 8px 24px ' + a + '50}.hacp{margin-top:20px;padding:12px;background:' + (theme === 'glass' ? 'rgba(255,255,255,0.05)' : t.bg) + ';border-radius:8px;font-size:11px;color:' + t.muted + ';font-family:monospace}</style></head><body><div class="form-container"><form>' + fieldsHTML + '<button type="submit">' + buttonText + '</button></form><div class="hacp">@centaur-generated true<br>@human Chris Conen<br>@ai Claude</div></div></body></html>';
+            document.getElementById('previewFrame').srcdoc = html;
         }
-        .form-container {
-            width: 100%;
-            max-width: 400px;
-        }
-        form {
-            background: ${t.surface};
-            padding: 32px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-        }
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: ${t.text};
-        }
-        input, textarea, select {
-            width: 100%;
-            padding: 12px 14px;
-            background: ${t.bg};
-            border: 2px solid ${t.muted}40;
-            border-radius: 8px;
-            color: ${t.text};
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-        input[type="checkbox"] {
-            width: auto;
-        }
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: ${a};
-            box-shadow: 0 0 0 3px ${a}30;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: ${a};
-            color: ${theme === 'light' ? '#ffffff' : t.bg};
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px ${a}40;
-        }
-        .hacp {
-            margin-top: 20px;
-            padding: 12px;
-            background: ${t.bg};
-            border-radius: 8px;
-            font-size: 11px;
-            color: ${t.muted};
-            font-family: monospace;
-        }
-    </style>
-</head>
-<body>
-    <div class="form-container">
-        <form>
-            ${fieldsHTML}
-            <button type="submit">${buttonText}</button>
-        </form>
-        <div class="hacp">
-            @centaur-generated true<br>
-            @human Chris Conen<br>
-            @ai Claude
-        </div>
-    </div>
-</body>
-</html>`;
-            
-            preview.srcdoc = html;
-        }
-
-        // Initial compile
-        document.addEventListener('DOMContentLoaded', () => {
-            compileCode();
-            
-            // Auto-compile on input
-            document.getElementById('centaurInput').addEventListener('input', () => {
-                clearTimeout(window.compileTimeout);
-                window.compileTimeout = setTimeout(compileCode, 500);
-            });
-        });
+        document.addEventListener('DOMContentLoaded', () => { compileCode(); let timeout; document.getElementById('centaurInput').addEventListener('input', () => { clearTimeout(timeout); timeout = setTimeout(compileCode, 400); }); });
     </script>
 </body>
 </html>
