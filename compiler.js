@@ -1,6 +1,6 @@
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║                        CENTAUR LANG COMPILER v0.3.0                       ║
+ * ║                        CENTAUR LANG COMPILER v0.4.0                       ║
  * ╠═══════════════════════════════════════════════════════════════════════════╣
  * ║  Human+AI Code Protocol (HACP)                                            ║
  * ║  ─────────────────────────────────────────────────────────────────────── ║
@@ -13,7 +13,7 @@
  * ║  ─────────────────────────────────────────────────────────────────────── ║
  * ║  Created: 2025-12-27                                                      ║
  * ║  Updated: 2025-12-28                                                      ║
- * ║  Version: 0.3.0                                                           ║
+ * ║  Version: 0.4.0                                                           ║
  * ║  License: MIT                                                             ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  * 
@@ -22,17 +22,23 @@
 
 class CentaurCompiler {
     constructor() {
-        this.version = '0.3.0';
+        this.version = '0.4.0';
         this.components = {
             form: this.generateForm.bind(this),
             hero: this.generateHero.bind(this),
             card: this.generateCard.bind(this),
             navigation: this.generateNavigation.bind(this),
-            // NEW in v0.3.0
+            // v0.3.0 components
             modal: this.generateModal.bind(this),
             table: this.generateTable.bind(this),
             footer: this.generateFooter.bind(this),
-            gallery: this.generateGallery.bind(this)
+            gallery: this.generateGallery.bind(this),
+            // NEW in v0.4.0
+            accordion: this.generateAccordion.bind(this),
+            tabs: this.generateTabs.bind(this),
+            carousel: this.generateCarousel.bind(this),
+            pricing: this.generatePricing.bind(this),
+            testimonial: this.generateTestimonial.bind(this)
         };
         this.styleMode = 'vanilla'; // 'vanilla' or 'tailwind'
     }
@@ -201,11 +207,42 @@ class CentaurCompiler {
             case 'gallery':
                 this.parseGalleryDescription(component, desc, lines);
                 break;
+            // NEW in v0.4.0
+            case 'accordion':
+            case 'faq':
+            case 'collapsible':
+                component.componentType = 'accordion';
+                this.parseAccordionDescription(component, desc, lines);
+                break;
+            case 'tabs':
+            case 'tabbed':
+                component.componentType = 'tabs';
+                this.parseTabsDescription(component, desc, lines);
+                break;
+            case 'carousel':
+            case 'slider':
+            case 'slideshow':
+                component.componentType = 'carousel';
+                this.parseCarouselDescription(component, desc, lines);
+                break;
+            case 'pricing':
+            case 'plans':
+            case 'packages':
+                component.componentType = 'pricing';
+                this.parsePricingDescription(component, desc, lines);
+                break;
+            case 'testimonial':
+            case 'testimonials':
+            case 'reviews':
+            case 'quotes':
+                component.componentType = 'testimonial';
+                this.parseTestimonialDescription(component, desc, lines);
+                break;
         }
     }
 
     /**
-     * Enhanced component type detection (v0.3.0)
+     * Enhanced component type detection (v0.4.0)
      */
     detectComponentType(desc) {
         const patterns = {
@@ -216,7 +253,13 @@ class CentaurCompiler {
             modal: [/modal/i, /popup/i, /dialog/i, /overlay/i, /lightbox/i, /alert/i],
             table: [/table/i, /grid.*data/i, /rows.*columns/i, /data.*display/i, /list.*items/i],
             footer: [/footer/i, /bottom.*section/i, /copyright/i, /social.*links/i],
-            gallery: [/gallery/i, /images/i, /photos/i, /portfolio/i, /grid.*images/i]
+            gallery: [/gallery/i, /images/i, /photos/i, /portfolio/i, /grid.*images/i],
+            // NEW in v0.4.0
+            accordion: [/accordion/i, /faq/i, /collapsible/i, /expand/i, /collapse/i],
+            tabs: [/tabs?/i, /tabbed/i, /tab.*panel/i, /tab.*content/i],
+            carousel: [/carousel/i, /slider/i, /slideshow/i, /slides/i, /swiper/i],
+            pricing: [/pricing/i, /plans?/i, /packages?/i, /subscription/i, /tiers?/i],
+            testimonial: [/testimonial/i, /reviews?/i, /quotes?/i, /feedback/i, /customer.*say/i]
         };
 
         for (const [type, typePatterns] of Object.entries(patterns)) {
@@ -1975,6 +2018,1192 @@ console.log('🐴 CENTAUR Gallery loaded: ${component.name}');`;
     });
 
     console.log('🐴 CENTAUR Gallery loaded: ${component.name}');
+})();`;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // NEW v0.4.0 COMPONENTS
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * NEW v0.4.0: Parse accordion descriptions
+     */
+    parseAccordionDescription(component, desc, lines) {
+        component.items = [];
+        let currentItem = null;
+
+        for (const line of lines) {
+            // Match questions/titles with ## or Q: prefix
+            const titleMatch = line.match(/^##?\s*(.+)/) ||
+                              line.match(/^Q:\s*(.+)/i) ||
+                              line.match(/^-\s*["']([^"']+)["']/);
+            
+            if (titleMatch) {
+                if (currentItem) component.items.push(currentItem);
+                currentItem = {
+                    title: titleMatch[1].trim(),
+                    content: ''
+                };
+            } else if (currentItem && line.trim()) {
+                // Content lines (A: prefix or plain text)
+                const contentMatch = line.match(/^A:\s*(.+)/i);
+                currentItem.content += (contentMatch ? contentMatch[1] : line.trim()) + ' ';
+            }
+        }
+
+        if (currentItem) component.items.push(currentItem);
+
+        // Default items if none found
+        if (component.items.length === 0) {
+            component.items = [
+                { title: 'What is CENTAUR?', content: 'CENTAUR is the world\'s first Human+AI creative partnership, combining human vision with AI capabilities.' },
+                { title: 'How does it work?', content: 'You write natural language descriptions, and CENTAUR compiles them into production-ready HTML, CSS, and JavaScript.' },
+                { title: 'Is it free?', content: 'Yes, CENTAUR LANG is open source and free to use under the MIT license.' }
+            ];
+        }
+
+        component.options.allowMultiple = /multiple|multi/i.test(desc);
+        component.options.defaultOpen = /open|expanded/i.test(desc) ? 0 : -1;
+    }
+
+    /**
+     * NEW v0.4.0: Parse tabs descriptions
+     */
+    parseTabsDescription(component, desc, lines) {
+        component.items = [];
+        let currentTab = null;
+
+        for (const line of lines) {
+            const tabMatch = line.match(/^##?\s*(.+)/) ||
+                            line.match(/^Tab:\s*(.+)/i) ||
+                            line.match(/^-\s*["']([^"']+)["']/);
+            
+            if (tabMatch) {
+                if (currentTab) component.items.push(currentTab);
+                currentTab = {
+                    title: tabMatch[1].trim(),
+                    content: ''
+                };
+            } else if (currentTab && line.trim()) {
+                currentTab.content += line.trim() + ' ';
+            }
+        }
+
+        if (currentTab) component.items.push(currentTab);
+
+        // Default tabs if none found
+        if (component.items.length === 0) {
+            component.items = [
+                { title: 'Overview', content: 'CENTAUR LANG is a revolutionary Human+AI programming language that transforms natural language into code.' },
+                { title: 'Features', content: 'Natural language parsing, multiple components, dark/light themes, Tailwind support, and more.' },
+                { title: 'Getting Started', content: 'Include the compiler, write your .centaur file, and compile to HTML/CSS/JS.' }
+            ];
+        }
+
+        component.options.vertical = /vertical/i.test(desc);
+        component.options.pills = /pills?/i.test(desc);
+    }
+
+    /**
+     * NEW v0.4.0: Parse carousel descriptions
+     */
+    parseCarouselDescription(component, desc, lines) {
+        component.items = [];
+
+        for (const line of lines) {
+            const slideMatch = line.match(/^-\s*(.+)/);
+            if (slideMatch) {
+                const slideText = slideMatch[1].trim();
+                component.items.push({
+                    image: `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 100)}`,
+                    title: slideText,
+                    description: ''
+                });
+            }
+        }
+
+        // Default slides if none found
+        if (component.items.length === 0) {
+            for (let i = 1; i <= 4; i++) {
+                component.items.push({
+                    image: `https://picsum.photos/800/400?random=${i}`,
+                    title: `Slide ${i}`,
+                    description: `Description for slide ${i}`
+                });
+            }
+        }
+
+        component.options.autoplay = /auto/i.test(desc);
+        component.options.interval = 5000;
+        component.options.showDots = !/no.*dots/i.test(desc);
+        component.options.showArrows = !/no.*arrows/i.test(desc);
+
+        const intervalMatch = desc.match(/(\d+)\s*(?:seconds?|s)/i);
+        if (intervalMatch) {
+            component.options.interval = parseInt(intervalMatch[1]) * 1000;
+        }
+    }
+
+    /**
+     * NEW v0.4.0: Parse pricing descriptions
+     */
+    parsePricingDescription(component, desc, lines) {
+        component.items = [];
+        let currentPlan = null;
+
+        for (const line of lines) {
+            // Plan header: ## Basic, ## Pro, etc.
+            const planMatch = line.match(/^##?\s*(.+)/);
+            if (planMatch) {
+                if (currentPlan) component.items.push(currentPlan);
+                currentPlan = {
+                    name: planMatch[1].trim(),
+                    price: '$0',
+                    period: '/month',
+                    features: [],
+                    highlighted: false,
+                    buttonText: 'Get Started'
+                };
+            } else if (currentPlan) {
+                // Price line: $29/month, $99/year
+                const priceMatch = line.match(/\$(\d+)(?:\/(\w+))?/);
+                if (priceMatch) {
+                    currentPlan.price = '$' + priceMatch[1];
+                    currentPlan.period = priceMatch[2] ? '/' + priceMatch[2] : '/month';
+                }
+                // Feature line: - Feature name
+                const featureMatch = line.match(/^-\s*(.+)/);
+                if (featureMatch) {
+                    currentPlan.features.push(featureMatch[1].trim());
+                }
+                // Highlighted/recommended
+                if (/popular|recommended|featured|highlight/i.test(line)) {
+                    currentPlan.highlighted = true;
+                }
+                // Button text
+                const buttonMatch = line.match(/button.*["']([^"']+)["']/i);
+                if (buttonMatch) {
+                    currentPlan.buttonText = buttonMatch[1];
+                }
+            }
+        }
+
+        if (currentPlan) component.items.push(currentPlan);
+
+        // Default plans if none found
+        if (component.items.length === 0) {
+            component.items = [
+                {
+                    name: 'Starter',
+                    price: '$9',
+                    period: '/month',
+                    features: ['5 Projects', 'Basic Support', '1GB Storage', 'Email Notifications'],
+                    highlighted: false,
+                    buttonText: 'Start Free Trial'
+                },
+                {
+                    name: 'Professional',
+                    price: '$29',
+                    period: '/month',
+                    features: ['Unlimited Projects', 'Priority Support', '10GB Storage', 'Advanced Analytics', 'Custom Domain'],
+                    highlighted: true,
+                    buttonText: 'Get Started'
+                },
+                {
+                    name: 'Enterprise',
+                    price: '$99',
+                    period: '/month',
+                    features: ['Everything in Pro', '24/7 Support', 'Unlimited Storage', 'API Access', 'Custom Integrations', 'SLA Guarantee'],
+                    highlighted: false,
+                    buttonText: 'Contact Sales'
+                }
+            ];
+        }
+    }
+
+    /**
+     * NEW v0.4.0: Parse testimonial descriptions
+     */
+    parseTestimonialDescription(component, desc, lines) {
+        component.items = [];
+        let currentTestimonial = null;
+
+        for (const line of lines) {
+            // Quote line starts with > or "
+            const quoteMatch = line.match(/^>\s*["']?(.+)["']?$/) ||
+                              line.match(/^["'](.+)["']$/);
+            if (quoteMatch) {
+                if (currentTestimonial) component.items.push(currentTestimonial);
+                currentTestimonial = {
+                    quote: quoteMatch[1].trim(),
+                    author: 'Anonymous',
+                    role: '',
+                    company: '',
+                    avatar: `https://i.pravatar.cc/100?img=${Math.floor(Math.random() * 70)}`
+                };
+            } else if (currentTestimonial) {
+                // Author line: - Name, Role at Company
+                const authorMatch = line.match(/^-\s*(.+)/);
+                if (authorMatch) {
+                    const authorText = authorMatch[1].trim();
+                    const parts = authorText.split(/,\s*|\s+at\s+/i);
+                    currentTestimonial.author = parts[0] || 'Anonymous';
+                    currentTestimonial.role = parts[1] || '';
+                    currentTestimonial.company = parts[2] || '';
+                }
+            }
+        }
+
+        if (currentTestimonial) component.items.push(currentTestimonial);
+
+        // Default testimonials if none found
+        if (component.items.length === 0) {
+            component.items = [
+                {
+                    quote: 'CENTAUR LANG has completely transformed how we build web components. What used to take hours now takes minutes!',
+                    author: 'Sarah Johnson',
+                    role: 'Lead Developer',
+                    company: 'TechCorp',
+                    avatar: 'https://i.pravatar.cc/100?img=1'
+                },
+                {
+                    quote: 'The natural language approach makes it accessible to designers who don\'t code. Game changer for our team.',
+                    author: 'Michael Chen',
+                    role: 'Design Director',
+                    company: 'Creative Agency',
+                    avatar: 'https://i.pravatar.cc/100?img=2'
+                },
+                {
+                    quote: 'Finally, a tool that truly bridges the gap between human creativity and AI capability. Highly recommended!',
+                    author: 'Emma Williams',
+                    role: 'Freelance Designer',
+                    company: '',
+                    avatar: 'https://i.pravatar.cc/100?img=3'
+                }
+            ];
+        }
+
+        component.options.layout = /grid/i.test(desc) ? 'grid' : 'carousel';
+        component.options.showStars = /stars?|rating/i.test(desc);
+    }
+
+    /**
+     * NEW v0.4.0: Generate Accordion component
+     */
+    generateAccordion(component) {
+        const isDark = component.theme === 'dark';
+        const useTailwind = component.style === 'tailwind';
+
+        const itemsHtml = component.items.map((item, i) => {
+            const isOpen = component.options.defaultOpen === i;
+            if (useTailwind) {
+                return `
+        <div class="centaur-accordion-item border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}">
+            <button class="centaur-accordion-trigger w-full flex justify-between items-center py-4 px-6 text-left font-semibold ${isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-50'}" data-index="${i}">
+                <span>${item.title}</span>
+                <svg class="w-5 h-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div class="centaur-accordion-content overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96' : 'max-h-0'}">
+                <div class="px-6 pb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}">
+                    ${item.content}
+                </div>
+            </div>
+        </div>`;
+            } else {
+                return `
+        <div class="centaur-accordion-item ${isOpen ? 'active' : ''}">
+            <button class="centaur-accordion-trigger" data-index="${i}">
+                <span>${item.title}</span>
+                <span class="centaur-accordion-icon">▼</span>
+            </button>
+            <div class="centaur-accordion-content">
+                <div class="centaur-accordion-inner">
+                    ${item.content}
+                </div>
+            </div>
+        </div>`;
+            }
+        }).join('');
+
+        const html = useTailwind
+            ? `<!-- CENTAUR LANG Generated Accordion: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-accordion ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} rounded-xl overflow-hidden shadow-lg" data-allow-multiple="${component.options.allowMultiple}">
+    ${itemsHtml}
+</div>`
+            : `<!-- CENTAUR LANG Generated Accordion: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-accordion ${isDark ? 'centaur-dark' : 'centaur-light'}" data-allow-multiple="${component.options.allowMultiple}">
+    ${itemsHtml}
+</div>`;
+
+        const css = useTailwind ? '' : this.generateAccordionCss(component, isDark);
+        const js = this.generateAccordionJs(component);
+
+        return { html, css, js };
+    }
+
+    generateAccordionCss(component, isDark) {
+        const bg = isDark ? '#1a1a2e' : '#ffffff';
+        const text = isDark ? '#ffffff' : '#1a1a2e';
+        const border = isDark ? '#333' : '#e0e0e0';
+        const hoverBg = isDark ? '#16213e' : '#f8f9fa';
+
+        return `.centaur-accordion {
+    background: ${bg};
+    color: ${text};
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.centaur-accordion-item {
+    border-bottom: 1px solid ${border};
+}
+
+.centaur-accordion-item:last-child {
+    border-bottom: none;
+}
+
+.centaur-accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: left;
+}
+
+.centaur-accordion-trigger:hover {
+    background: ${hoverBg};
+}
+
+.centaur-accordion-icon {
+    transition: transform 0.3s;
+    font-size: 0.8rem;
+}
+
+.centaur-accordion-item.active .centaur-accordion-icon {
+    transform: rotate(180deg);
+}
+
+.centaur-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.centaur-accordion-item.active .centaur-accordion-content {
+    max-height: 500px;
+}
+
+.centaur-accordion-inner {
+    padding: 0 1.5rem 1.25rem;
+    opacity: 0.8;
+    line-height: 1.6;
+}`;
+    }
+
+    generateAccordionJs(component) {
+        const accordionId = this.toKebabCase(component.name);
+        return `// CENTAUR LANG Accordion: ${component.name}
+(function() {
+    const accordion = document.getElementById('${accordionId}');
+    if (!accordion) return;
+
+    const allowMultiple = accordion.dataset.allowMultiple === 'true';
+    const triggers = accordion.querySelectorAll('.centaur-accordion-trigger');
+
+    triggers.forEach(trigger => {
+        trigger.addEventListener('click', () => {
+            const item = trigger.closest('.centaur-accordion-item');
+            const isActive = item.classList.contains('active');
+
+            if (!allowMultiple) {
+                accordion.querySelectorAll('.centaur-accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+            }
+
+            if (!isActive) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    });
+
+    console.log('🐴 CENTAUR Accordion loaded: ${component.name}');
+})();`;
+    }
+
+    /**
+     * NEW v0.4.0: Generate Tabs component
+     */
+    generateTabs(component) {
+        const isDark = component.theme === 'dark';
+        const useTailwind = component.style === 'tailwind';
+
+        const tabsHtml = component.items.map((item, i) => {
+            const isActive = i === 0;
+            if (useTailwind) {
+                const activeClass = isActive ? (isDark ? 'bg-gray-700 text-white' : 'bg-blue-600 text-white') : '';
+                return `<button class="centaur-tab-btn px-6 py-3 font-semibold rounded-t-lg transition-colors ${activeClass} ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}" data-tab="${i}">${item.title}</button>`;
+            } else {
+                return `<button class="centaur-tab-btn ${isActive ? 'active' : ''}" data-tab="${i}">${item.title}</button>`;
+            }
+        }).join('\n            ');
+
+        const panelsHtml = component.items.map((item, i) => {
+            const isActive = i === 0;
+            if (useTailwind) {
+                return `<div class="centaur-tab-panel p-6 ${isActive ? '' : 'hidden'}" data-panel="${i}">${item.content}</div>`;
+            } else {
+                return `<div class="centaur-tab-panel ${isActive ? 'active' : ''}" data-panel="${i}">${item.content}</div>`;
+            }
+        }).join('\n        ');
+
+        const html = useTailwind
+            ? `<!-- CENTAUR LANG Generated Tabs: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-tabs ${isDark ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'} rounded-xl overflow-hidden shadow-lg">
+    <div class="centaur-tab-list flex ${isDark ? 'bg-gray-800' : 'bg-gray-100'} border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}">
+        ${tabsHtml}
+    </div>
+    <div class="centaur-tab-panels">
+        ${panelsHtml}
+    </div>
+</div>`
+            : `<!-- CENTAUR LANG Generated Tabs: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-tabs ${isDark ? 'centaur-dark' : 'centaur-light'}">
+    <div class="centaur-tab-list">
+        ${tabsHtml}
+    </div>
+    <div class="centaur-tab-panels">
+        ${panelsHtml}
+    </div>
+</div>`;
+
+        const css = useTailwind ? '' : this.generateTabsCss(component, isDark);
+        const js = this.generateTabsJs(component);
+
+        return { html, css, js };
+    }
+
+    generateTabsCss(component, isDark) {
+        const bg = isDark ? '#1a1a2e' : '#ffffff';
+        const text = isDark ? '#ffffff' : '#1a1a2e';
+        const tabBg = isDark ? '#16213e' : '#f0f0f0';
+        const activeBg = isDark ? '#e94560' : '#3b82f6';
+
+        return `.centaur-tabs {
+    background: ${bg};
+    color: ${text};
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.centaur-tab-list {
+    display: flex;
+    background: ${tabBg};
+    border-bottom: 1px solid ${isDark ? '#333' : '#e0e0e0'};
+}
+
+.centaur-tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.centaur-tab-btn:hover {
+    background: ${isDark ? '#333' : '#e0e0e0'};
+}
+
+.centaur-tab-btn.active {
+    background: ${activeBg};
+    color: white;
+    border-bottom-color: ${activeBg};
+}
+
+.centaur-tab-panel {
+    display: none;
+    padding: 1.5rem;
+    line-height: 1.6;
+}
+
+.centaur-tab-panel.active {
+    display: block;
+}`;
+    }
+
+    generateTabsJs(component) {
+        const tabsId = this.toKebabCase(component.name);
+        return `// CENTAUR LANG Tabs: ${component.name}
+(function() {
+    const tabs = document.getElementById('${tabsId}');
+    if (!tabs) return;
+
+    const buttons = tabs.querySelectorAll('.centaur-tab-btn');
+    const panels = tabs.querySelectorAll('.centaur-tab-panel');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const index = btn.dataset.tab;
+
+            buttons.forEach(b => b.classList.remove('active'));
+            panels.forEach(p => {
+                p.classList.remove('active');
+                p.classList.add('hidden');
+            });
+
+            btn.classList.add('active');
+            const panel = tabs.querySelector('[data-panel="' + index + '"]');
+            if (panel) {
+                panel.classList.add('active');
+                panel.classList.remove('hidden');
+            }
+        });
+    });
+
+    console.log('🐴 CENTAUR Tabs loaded: ${component.name}');
+})();`;
+    }
+
+    /**
+     * NEW v0.4.0: Generate Carousel component
+     */
+    generateCarousel(component) {
+        const isDark = component.theme === 'dark';
+        const useTailwind = component.style === 'tailwind';
+        const opts = component.options;
+
+        const slidesHtml = component.items.map((item, i) => {
+            if (useTailwind) {
+                return `
+            <div class="centaur-slide min-w-full ${i === 0 ? '' : 'hidden'}" data-slide="${i}">
+                <img src="${item.image}" alt="${item.title}" class="w-full h-64 md:h-96 object-cover">
+                <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                    <h3 class="text-2xl font-bold text-white">${item.title}</h3>
+                    ${item.description ? `<p class="text-white/80 mt-2">${item.description}</p>` : ''}
+                </div>
+            </div>`;
+            } else {
+                return `
+            <div class="centaur-slide ${i === 0 ? 'active' : ''}" data-slide="${i}">
+                <img src="${item.image}" alt="${item.title}">
+                <div class="centaur-slide-caption">
+                    <h3>${item.title}</h3>
+                    ${item.description ? `<p>${item.description}</p>` : ''}
+                </div>
+            </div>`;
+            }
+        }).join('');
+
+        const dotsHtml = opts.showDots ? component.items.map((_, i) => {
+            if (useTailwind) {
+                return `<button class="centaur-dot w-3 h-3 rounded-full ${i === 0 ? 'bg-white' : 'bg-white/50'}" data-dot="${i}"></button>`;
+            } else {
+                return `<button class="centaur-dot ${i === 0 ? 'active' : ''}" data-dot="${i}"></button>`;
+            }
+        }).join('') : '';
+
+        const arrowsHtml = opts.showArrows ? (useTailwind 
+            ? `<button class="centaur-prev absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full text-white text-2xl">&#10094;</button>
+            <button class="centaur-next absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full text-white text-2xl">&#10095;</button>`
+            : `<button class="centaur-prev">&#10094;</button>
+            <button class="centaur-next">&#10095;</button>`) : '';
+
+        const html = useTailwind
+            ? `<!-- CENTAUR LANG Generated Carousel: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-carousel relative overflow-hidden rounded-xl shadow-lg" data-autoplay="${opts.autoplay}" data-interval="${opts.interval}">
+    <div class="centaur-slides relative">
+        ${slidesHtml}
+    </div>
+    ${arrowsHtml}
+    ${dotsHtml ? `<div class="centaur-dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">${dotsHtml}</div>` : ''}
+</div>`
+            : `<!-- CENTAUR LANG Generated Carousel: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-carousel ${isDark ? 'centaur-dark' : 'centaur-light'}" data-autoplay="${opts.autoplay}" data-interval="${opts.interval}">
+    <div class="centaur-slides">
+        ${slidesHtml}
+    </div>
+    ${arrowsHtml}
+    ${dotsHtml ? `<div class="centaur-dots">${dotsHtml}</div>` : ''}
+</div>`;
+
+        const css = useTailwind ? '' : this.generateCarouselCss(component, isDark);
+        const js = this.generateCarouselJs(component);
+
+        return { html, css, js };
+    }
+
+    generateCarouselCss(component, isDark) {
+        return `.centaur-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.centaur-slides {
+    position: relative;
+    width: 100%;
+}
+
+.centaur-slide {
+    display: none;
+    position: relative;
+}
+
+.centaur-slide.active {
+    display: block;
+}
+
+.centaur-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.centaur-slide-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+}
+
+.centaur-slide-caption h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.centaur-slide-caption p {
+    opacity: 0.9;
+}
+
+.centaur-prev, .centaur-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 10;
+}
+
+.centaur-prev:hover, .centaur-next:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.centaur-prev { left: 1rem; }
+.centaur-next { right: 1rem; }
+
+.centaur-dots {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+}
+
+.centaur-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.centaur-dot.active, .centaur-dot:hover {
+    background: white;
+}`;
+    }
+
+    generateCarouselJs(component) {
+        const carouselId = this.toKebabCase(component.name);
+        return `// CENTAUR LANG Carousel: ${component.name}
+(function() {
+    const carousel = document.getElementById('${carouselId}');
+    if (!carousel) return;
+
+    const slides = carousel.querySelectorAll('.centaur-slide');
+    const dots = carousel.querySelectorAll('.centaur-dot');
+    const prevBtn = carousel.querySelector('.centaur-prev');
+    const nextBtn = carousel.querySelector('.centaur-next');
+    
+    let currentIndex = 0;
+    const autoplay = carousel.dataset.autoplay === 'true';
+    const interval = parseInt(carousel.dataset.interval) || 5000;
+    let autoplayTimer = null;
+
+    const showSlide = (index) => {
+        currentIndex = (index + slides.length) % slides.length;
+        
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === currentIndex);
+            slide.classList.toggle('hidden', i !== currentIndex);
+        });
+        
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+            dot.classList.toggle('bg-white', i === currentIndex);
+            dot.classList.toggle('bg-white/50', i !== currentIndex);
+        });
+    };
+
+    const nextSlide = () => showSlide(currentIndex + 1);
+    const prevSlide = () => showSlide(currentIndex - 1);
+
+    prevBtn?.addEventListener('click', prevSlide);
+    nextBtn?.addEventListener('click', nextSlide);
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showSlide(i));
+    });
+
+    if (autoplay) {
+        autoplayTimer = setInterval(nextSlide, interval);
+        
+        carousel.addEventListener('mouseenter', () => clearInterval(autoplayTimer));
+        carousel.addEventListener('mouseleave', () => {
+            autoplayTimer = setInterval(nextSlide, interval);
+        });
+    }
+
+    // Touch support
+    let touchStartX = 0;
+    carousel.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    });
+    carousel.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            diff > 0 ? nextSlide() : prevSlide();
+        }
+    });
+
+    console.log('🐴 CENTAUR Carousel loaded: ${component.name}');
+})();`;
+    }
+
+    /**
+     * NEW v0.4.0: Generate Pricing component
+     */
+    generatePricing(component) {
+        const isDark = component.theme === 'dark';
+        const useTailwind = component.style === 'tailwind';
+
+        const plansHtml = component.items.map((plan) => {
+            const featuresHtml = plan.features.map(f => {
+                if (useTailwind) {
+                    return `<li class="flex items-center gap-2"><span class="text-green-500">✓</span> ${f}</li>`;
+                } else {
+                    return `<li><span class="check">✓</span> ${f}</li>`;
+                }
+            }).join('');
+
+            if (useTailwind) {
+                const highlightClass = plan.highlighted 
+                    ? 'border-2 border-blue-500 scale-105 shadow-2xl' 
+                    : 'border border-gray-200';
+                return `
+            <div class="centaur-pricing-card ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-2xl p-8 ${highlightClass} relative">
+                ${plan.highlighted ? '<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold">Most Popular</div>' : ''}
+                <h3 class="text-xl font-bold mb-2">${plan.name}</h3>
+                <div class="text-4xl font-bold mb-1">${plan.price}<span class="text-lg font-normal opacity-70">${plan.period}</span></div>
+                <ul class="space-y-3 my-6 ${isDark ? 'text-gray-300' : 'text-gray-600'}">
+                    ${featuresHtml}
+                </ul>
+                <button class="w-full py-3 px-6 ${plan.highlighted ? 'bg-blue-600 hover:bg-blue-700 text-white' : isDark ? 'bg-gray-700 hover:bg-gray-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-900'} rounded-lg font-semibold transition-colors">
+                    ${plan.buttonText}
+                </button>
+            </div>`;
+            } else {
+                return `
+            <div class="centaur-pricing-card ${plan.highlighted ? 'highlighted' : ''}">
+                ${plan.highlighted ? '<div class="popular-badge">Most Popular</div>' : ''}
+                <h3 class="plan-name">${plan.name}</h3>
+                <div class="plan-price">${plan.price}<span>${plan.period}</span></div>
+                <ul class="plan-features">
+                    ${featuresHtml}
+                </ul>
+                <button class="plan-button">${plan.buttonText}</button>
+            </div>`;
+            }
+        }).join('');
+
+        const html = useTailwind
+            ? `<!-- CENTAUR LANG Generated Pricing: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-pricing py-12 ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="grid md:grid-cols-${component.items.length} gap-8 items-center">
+            ${plansHtml}
+        </div>
+    </div>
+</div>`
+            : `<!-- CENTAUR LANG Generated Pricing: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-pricing ${isDark ? 'centaur-dark' : 'centaur-light'}">
+    <div class="centaur-pricing-grid">
+        ${plansHtml}
+    </div>
+</div>`;
+
+        const css = useTailwind ? '' : this.generatePricingCss(component, isDark);
+        const js = this.generatePricingJs(component);
+
+        return { html, css, js };
+    }
+
+    generatePricingCss(component, isDark) {
+        const bg = isDark ? '#0f0f1a' : '#f8f9fa';
+        const cardBg = isDark ? '#1a1a2e' : '#ffffff';
+        const text = isDark ? '#ffffff' : '#1a1a2e';
+        const accent = '#3b82f6';
+
+        return `.centaur-pricing {
+    background: ${bg};
+    color: ${text};
+    padding: 4rem 2rem;
+}
+
+.centaur-pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.centaur-pricing-card {
+    background: ${cardBg};
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid ${isDark ? '#333' : '#e0e0e0'};
+}
+
+.centaur-pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.centaur-pricing-card.highlighted {
+    border: 2px solid ${accent};
+    transform: scale(1.05);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+}
+
+.popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: ${accent};
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.plan-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.plan-price {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.plan-price span {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.7;
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.plan-features li {
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plan-features .check {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.plan-button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    background: ${isDark ? '#333' : '#e0e0e0'};
+    color: ${text};
+}
+
+.centaur-pricing-card.highlighted .plan-button {
+    background: ${accent};
+    color: white;
+}
+
+.plan-button:hover {
+    opacity: 0.9;
+}`;
+    }
+
+    generatePricingJs(component) {
+        return `// CENTAUR LANG Pricing: ${component.name}
+console.log('🐴 CENTAUR Pricing loaded: ${component.name}');`;
+    }
+
+    /**
+     * NEW v0.4.0: Generate Testimonial component
+     */
+    generateTestimonial(component) {
+        const isDark = component.theme === 'dark';
+        const useTailwind = component.style === 'tailwind';
+        const opts = component.options;
+
+        const testimonialsHtml = component.items.map((item, i) => {
+            const starsHtml = opts.showStars ? '<div class="stars">★★★★★</div>' : '';
+            
+            if (useTailwind) {
+                return `
+            <div class="centaur-testimonial-card ${isDark ? 'bg-gray-800' : 'bg-white'} p-8 rounded-2xl shadow-lg ${opts.layout === 'carousel' && i > 0 ? 'hidden' : ''}" data-testimonial="${i}">
+                ${opts.showStars ? '<div class="text-yellow-400 text-xl mb-4">★★★★★</div>' : ''}
+                <blockquote class="text-lg mb-6 ${isDark ? 'text-gray-300' : 'text-gray-600'} italic">"${item.quote}"</blockquote>
+                <div class="flex items-center gap-4">
+                    <img src="${item.avatar}" alt="${item.author}" class="w-14 h-14 rounded-full object-cover">
+                    <div>
+                        <div class="font-bold">${item.author}</div>
+                        <div class="text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}">${item.role}${item.company ? ' at ' + item.company : ''}</div>
+                    </div>
+                </div>
+            </div>`;
+            } else {
+                return `
+            <div class="centaur-testimonial-card ${opts.layout === 'carousel' && i > 0 ? '' : 'active'}" data-testimonial="${i}">
+                ${starsHtml}
+                <blockquote>"${item.quote}"</blockquote>
+                <div class="author-info">
+                    <img src="${item.avatar}" alt="${item.author}">
+                    <div>
+                        <div class="author-name">${item.author}</div>
+                        <div class="author-role">${item.role}${item.company ? ' at ' + item.company : ''}</div>
+                    </div>
+                </div>
+            </div>`;
+            }
+        }).join('');
+
+        const dotsHtml = opts.layout === 'carousel' ? component.items.map((_, i) => 
+            `<button class="centaur-testimonial-dot ${i === 0 ? 'active' : ''}" data-dot="${i}"></button>`
+        ).join('') : '';
+
+        const html = useTailwind
+            ? `<!-- CENTAUR LANG Generated Testimonials: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-testimonials py-12 ${isDark ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'}" data-layout="${opts.layout}">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="${opts.layout === 'grid' ? 'grid md:grid-cols-3 gap-8' : 'relative'}">
+            ${testimonialsHtml}
+        </div>
+        ${dotsHtml ? `<div class="flex justify-center gap-2 mt-8">${dotsHtml}</div>` : ''}
+    </div>
+</div>`
+            : `<!-- CENTAUR LANG Generated Testimonials: ${component.name} -->
+<div id="${this.toKebabCase(component.name)}" class="centaur-testimonials ${isDark ? 'centaur-dark' : 'centaur-light'}" data-layout="${opts.layout}">
+    <div class="centaur-testimonials-container ${opts.layout}">
+        ${testimonialsHtml}
+    </div>
+    ${dotsHtml ? `<div class="centaur-testimonial-dots">${dotsHtml}</div>` : ''}
+</div>`;
+
+        const css = useTailwind ? '' : this.generateTestimonialCss(component, isDark);
+        const js = this.generateTestimonialJs(component);
+
+        return { html, css, js };
+    }
+
+    generateTestimonialCss(component, isDark) {
+        const bg = isDark ? '#0f0f1a' : '#f8f9fa';
+        const cardBg = isDark ? '#1a1a2e' : '#ffffff';
+        const text = isDark ? '#ffffff' : '#1a1a2e';
+
+        return `.centaur-testimonials {
+    background: ${bg};
+    color: ${text};
+    padding: 4rem 2rem;
+}
+
+.centaur-testimonials-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.centaur-testimonials-container.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.centaur-testimonials-container.carousel {
+    position: relative;
+}
+
+.centaur-testimonial-card {
+    background: ${cardBg};
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.centaur-testimonials-container.carousel .centaur-testimonial-card {
+    display: none;
+}
+
+.centaur-testimonials-container.carousel .centaur-testimonial-card.active {
+    display: block;
+}
+
+.stars {
+    color: #fbbf24;
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+blockquote {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-info img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-name {
+    font-weight: 700;
+}
+
+.author-role {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.centaur-testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.centaur-testimonial-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    background: ${isDark ? '#333' : '#ddd'};
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.centaur-testimonial-dot.active {
+    background: #e94560;
+}`;
+    }
+
+    generateTestimonialJs(component) {
+        const testimonialsId = this.toKebabCase(component.name);
+        return `// CENTAUR LANG Testimonials: ${component.name}
+(function() {
+    const container = document.getElementById('${testimonialsId}');
+    if (!container) return;
+
+    const layout = container.dataset.layout;
+    if (layout !== 'carousel') {
+        console.log('🐴 CENTAUR Testimonials loaded: ${component.name}');
+        return;
+    }
+
+    const cards = container.querySelectorAll('.centaur-testimonial-card');
+    const dots = container.querySelectorAll('.centaur-testimonial-dot');
+    let currentIndex = 0;
+
+    const showTestimonial = (index) => {
+        currentIndex = (index + cards.length) % cards.length;
+        
+        cards.forEach((card, i) => {
+            card.classList.toggle('active', i === currentIndex);
+            card.classList.toggle('hidden', i !== currentIndex);
+        });
+        
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIndex);
+        });
+    };
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => showTestimonial(i));
+    });
+
+    // Auto-rotate every 6 seconds
+    setInterval(() => showTestimonial(currentIndex + 1), 6000);
+
+    console.log('🐴 CENTAUR Testimonials loaded: ${component.name}');
 })();`;
     }
 
