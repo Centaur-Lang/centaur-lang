@@ -2291,9 +2291,9 @@
         <input type="email" name="email" id="newsletterEmail" placeholder="Enter your email" required>
         <button type="submit" id="newsletterBtn">Subscribe</button>
     </form>
-    <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
-    <div class="newsletter-success" id="newsletterSuccess">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+    <p class="newsletter-note" id="newsletterNote">No spam, ever. Unsubscribe anytime.</p>
+    <div class="newsletter-success" id="newsletterSuccess" style="display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#27CA40" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         <span>Welcome to the revolution! Check your inbox.</span>
     </div>
 </section>
@@ -2451,7 +2451,7 @@
         });
     }
 
-    // Add reveal class styling
+    / Add reveal class styling
     const style = document.createElement('style');
     style.textContent = `
         .section-header, .component-card, .version-card, .contact-card, .partner, .stat {
@@ -2480,7 +2480,7 @@
     const newsletterForm = document.getElementById('newsletterForm');
     const newsletterBtn = document.getElementById('newsletterBtn');
     const newsletterSuccess = document.getElementById('newsletterSuccess');
-    const newsletterNote = document.querySelector('.newsletter-note');
+    const newsletterNote = document.getElementById('newsletterNote');
 
     newsletterForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -2501,16 +2501,10 @@
                 body: JSON.stringify({ email: email })
             });
             
-            console.log('Response status:', response.status);
-            console.log('Response ok:', response.ok);
-            
-            const data = await response.json();
-            console.log('Response data:', data);
-            
             if (response.ok) {
                 // Success! - Hide form, show success message
                 newsletterForm.style.display = 'none';
-                document.getElementById('newsletterNote').style.display = 'none';
+                newsletterNote.style.display = 'none';
                 newsletterSuccess.style.display = 'flex';
             } else {
                 throw new Error('Submission failed: ' + response.status);
@@ -2520,7 +2514,7 @@
             console.error('Newsletter error:', error);
             newsletterBtn.textContent = 'Try Again';
             newsletterForm.classList.remove('loading');
-            alert('Error: ' + error.message);
+            alert('Something went wrong. Please try again.');
         }
     });
 </script>
