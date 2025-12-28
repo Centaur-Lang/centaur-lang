@@ -1,0 +1,28 @@
+/**
+ * CENTAUR LANG Example: Accordion Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component FAQ
+@type accordion
+@theme dark
+
+{
+  ## What is CENTAUR LANG?
+  CENTAUR LANG is the world's first Human+AI programming language.
+  It transforms natural language into production-ready code.
+  
+  ## Who created it?
+  CENTAUR LANG was created by Chris Conen (Human) and Claude (AI)
+  as part of the CENTAUR partnership.
+  
+  ## How does it work?
+  Write simple directives and natural language descriptions.
+  The compiler generates HTML, CSS, and JavaScript.
+  
+  ## Is it open source?
+  Yes! CENTAUR LANG is MIT licensed and free to use.
+  Visit github.com/Centaur-Lang/centaur-lang
+}

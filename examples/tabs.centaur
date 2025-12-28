@@ -1,0 +1,29 @@
+/**
+ * CENTAUR LANG Example: Tabs Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component ProductInfo
+@type tabs
+@theme dark
+
+{
+  ## Overview
+  CENTAUR LANG is a revolutionary approach to web development.
+  Write what you want in plain English, get production code.
+  
+  ## Features
+  - 13 production-ready components
+  - Natural language parsing
+  - Dark and light themes
+  - Tailwind CSS support
+  - HACP Protocol for transparency
+  
+  ## Getting Started
+  1. Include compiler.js in your project
+  2. Write your .centaur file
+  3. Call compiler.compile() with your code
+  4. Use the generated HTML, CSS, and JS!
+}

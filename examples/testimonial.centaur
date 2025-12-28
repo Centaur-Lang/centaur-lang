@@ -1,0 +1,26 @@
+/**
+ * CENTAUR LANG Example: Testimonial Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component CustomerReviews
+@type testimonial
+@theme dark
+
+{
+  Create a testimonial carousel with stars rating
+  
+  > "CENTAUR LANG has completely transformed how we build web components. What used to take hours now takes minutes!"
+  - Sarah Johnson, Lead Developer at TechCorp
+  
+  > "The natural language approach makes it accessible to designers who don't code. Game changer for our team."
+  - Michael Chen, Design Director at Creative Agency
+  
+  > "Finally, a tool that truly bridges the gap between human creativity and AI capability. Highly recommended!"
+  - Emma Williams, Freelance Designer
+  
+  > "We've reduced our development time by 60% since adopting CENTAUR LANG. The ROI is incredible."
+  - David Park, CTO at StartupXYZ
+}

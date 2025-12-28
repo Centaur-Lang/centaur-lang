@@ -1,0 +1,22 @@
+/**
+ * CENTAUR LANG Example: Carousel Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component HeroSlider
+@type carousel
+@theme dark
+
+{
+  Create an image carousel with
+  autoplay 5 seconds
+  show navigation arrows
+  show dots
+  
+  - Welcome to CENTAUR LANG
+  - Human + AI Partnership
+  - 13 Production Components
+  - Build Faster Together
+}

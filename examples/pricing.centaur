@@ -1,0 +1,40 @@
+/**
+ * CENTAUR LANG Example: Pricing Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component PricingPlans
+@type pricing
+@theme dark
+
+{
+  ## Starter
+  $9/month
+  - 5 Projects
+  - Basic Support
+  - 1GB Storage
+  - Email Notifications
+  button "Start Free Trial"
+  
+  ## Professional
+  $29/month
+  popular
+  - Unlimited Projects
+  - Priority Support
+  - 10GB Storage
+  - Advanced Analytics
+  - Custom Domain
+  button "Get Started"
+  
+  ## Enterprise
+  $99/month
+  - Everything in Pro
+  - 24/7 Support
+  - Unlimited Storage
+  - API Access
+  - Custom Integrations
+  - SLA Guarantee
+  button "Contact Sales"
+}
