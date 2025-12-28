@@ -2255,11 +2255,15 @@
 <section class="newsletter">
     <h3>Join the Human+AI Revolution</h3>
     <p>Be the first to know about new components, features, and the future of collaborative coding.</p>
-    <form class="newsletter-form" action="https://formspree.io/f/xykyddzz" method="POST">
-        <input type="email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Subscribe</button>
+    <form class="newsletter-form" id="newsletterForm">
+        <input type="email" name="email" id="newsletterEmail" placeholder="Enter your email" required>
+        <button type="submit" id="newsletterBtn">Subscribe</button>
     </form>
     <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+    <div class="newsletter-success" id="newsletterSuccess">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span>Welcome to the revolution! Check your inbox.</span>
+    </div>
 </section>
 
 <!-- CTA Section -->
@@ -2439,6 +2443,47 @@
 
     window.addEventListener('scroll', revealOnScroll);
     window.addEventListener('load', revealOnScroll);
+
+    // Newsletter AJAX Submit
+    const newsletterForm = document.getElementById('newsletterForm');
+    const newsletterBtn = document.getElementById('newsletterBtn');
+    const newsletterSuccess = document.getElementById('newsletterSuccess');
+    const newsletterNote = document.querySelector('.newsletter-note');
+
+    newsletterForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('newsletterEmail').value;
+        
+        // Loading state
+        newsletterBtn.textContent = 'Subscribing...';
+        newsletterForm.classList.add('loading');
+        
+        try {
+            const response = await fetch('https://formspree.io/f/xykyddzz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            });
+            
+            if (response.ok) {
+                // Success!
+                newsletterForm.classList.add('success');
+                newsletterNote.style.display = 'none';
+                newsletterSuccess.classList.add('show');
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (error) {
+            // Error handling
+            newsletterBtn.textContent = 'Try Again';
+            newsletterForm.classList.remove('loading');
+            alert('Something went wrong. Please try again.');
+        }
+    });
 </script>
 
 </body>
