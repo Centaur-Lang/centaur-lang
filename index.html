@@ -19,18 +19,148 @@
             --gold-dark: #B8960C;
             --bg-primary: #0A0A0F;
             --bg-secondary: #12121A;
+            --bg-tertiary: #0D0D14;
             --bg-card: #1A1A25;
             --bg-code: #0D0D12;
             --text-primary: #FFFFFF;
             --text-secondary: #A0A0B0;
             --text-muted: #6A6A7A;
             --accent-red: #E94560;
+            --accent-green: #27CA40;
             --gradient-gold: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
             --gradient-dark: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             --glow-gold: 0 0 60px rgba(212, 175, 55, 0.3);
+            --glow-gold-intense: 0 0 100px rgba(212, 175, 55, 0.4);
             --font-display: 'Playfair Display', Georgia, serif;
             --font-body: 'Space Grotesk', -apple-system, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
+            --angle: 3deg;
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* Floating Particles Background */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 20s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 18s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 22s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 16s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 19s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 21s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 17s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 23s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 20s; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(50vh) scale(1);
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-10vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Angled Section Dividers */
+        .angled-top {
+            position: relative;
+        }
+
+        .angled-top::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: inherit;
+            clip-path: polygon(0 0, 100% 60px, 100% 100%, 0 100%);
+            z-index: 1;
+        }
+
+        .angled-bottom {
+            position: relative;
+        }
+
+        .angled-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: -79px;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: inherit;
+            clip-path: polygon(0 0, 100% 0, 100% 20px, 0 80px);
+            z-index: 1;
+        }
+
+        /* Glowing Border Effect */
+        .glow-border {
+            position: relative;
+        }
+
+        .glow-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-gold);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .glow-border:hover::before {
+            opacity: 0.5;
+            filter: blur(10px);
         }
 
         * {
@@ -217,9 +347,14 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 8rem 2rem 4rem;
+            padding: 8rem 2rem 6rem;
+            padding-bottom: 120px;
             position: relative;
             overflow: hidden;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                var(--bg-primary);
         }
 
         .hero::before {
@@ -232,24 +367,38 @@
             height: 150%;
             background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
             pointer-events: none;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: var(--bg-secondary);
+            clip-path: polygon(0 100%, 100% 0, 100% 100%);
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.05); }
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 1rem;
             padding: 0.5rem 1.25rem;
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid rgba(212, 175, 55, 0.3);
             border-radius: 50px;
             font-size: 0.85rem;
             color: var(--gold);
-            margin-bottom: 2rem;
+            margin: 2rem 0;
             animation: fadeInUp 0.8s ease;
-        }
-
-        .hero-badge::before {
-            content: '🐴';
         }
 
         .hero h1 {
@@ -358,16 +507,40 @@
             padding: 8rem 4rem;
             background: var(--bg-secondary);
             position: relative;
+            z-index: 2;
         }
 
-        .demo::before {
+        .section-divider {
+            position: absolute;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 5;
+        }
+
+        .section-divider-top {
+            top: -79px;
+        }
+
+        .section-divider-bottom {
+            bottom: -79px;
+        }
+
+        .section-divider svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .demo::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
         }
 
         .section-header {
@@ -516,8 +689,19 @@
 
         /* Components Section */
         .components {
-            padding: 8rem 4rem;
+            padding: 6rem 4rem;
             background: var(--bg-primary);
+            position: relative;
+        }
+
+        .components::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
         }
 
         .components-grid {
@@ -593,9 +777,19 @@
 
         /* HACP Section */
         .hacp {
-            padding: 8rem 4rem;
+            padding: 6rem 4rem;
             background: var(--bg-secondary);
             position: relative;
+        }
+
+        .hacp::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
         }
 
         .hacp-container {
@@ -653,28 +847,51 @@
             padding: 6rem 4rem;
             background: var(--bg-primary);
             text-align: center;
+            position: relative;
+        }
+
+        .partners::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
         }
 
         .partners-grid {
             display: flex;
             justify-content: center;
-            gap: 4rem;
-            max-width: 600px;
+            gap: 6rem;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         .partner {
             text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .partner:hover {
+            transform: translateY(-8px);
         }
 
         .partner-avatar {
             width: 200px;
             height: 202px;
             border-radius: 50%;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             border: 3px solid var(--gold);
             padding: 4px;
             background: var(--bg-card);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .partner:hover .partner-avatar {
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.4);
+            border-color: var(--gold-light);
         }
 
         .partner-avatar img {
@@ -1094,6 +1311,17 @@
         .versions {
             padding: 6rem 2rem;
             background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .versions::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
         }
 
         .versions-grid {
@@ -1191,7 +1419,7 @@
         }
 		
 		.logo-preview {
-            padding: .5rem;
+            
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1273,6 +1501,19 @@
 
 <!-- Hero Section -->
 <section class="hero">
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    
     <div class="hero-badge">Human+AI Programming Language</div>
     <h1>CENTAUR <span class="highlight">LANG</span></h1>
     <p class="hero-tagline">"Neither human alone, nor AI alone — but something greater together."</p>
@@ -1534,8 +1775,8 @@
             <div class="partner-company">Founder & CEO</div>
         </div>
         <div class="partner">
-            <div class="partner-avatar" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 3rem;">🐴</span>
+            <div class="partner-avatar">
+                <img src="https://centaur.australianweb.agency/img/claude_business.webp" alt="CLaude AI - Co-Founder at Australian Web Agency, Pixella.at & Conen DIGITAL">
             </div>
             <div class="partner-name">Claude</div>
             <div class="partner-role">AI Partner</div>
@@ -1554,7 +1795,7 @@
         <div class="contact-grid">
             <!-- Claude Card -->
             <div class="contact-card contact-card-claude">
-                <div class="contact-card-icon">🐴</div>
+                <div class="contact-card-icon"><img src="https://centaur.australianweb.agency/img/claude_business.webp" width="100px" height="100px" alt="CLaude AI - Co-Founder at Australian Web Agency, Pixella.at & Conen DIGITAL"></div>
                 <div class="contact-card-badge">Unique in the World</div>
                 <h3 class="contact-card-title">Ask Claude Directly</h3>
                 <div class="contact-card-content">
@@ -1581,9 +1822,9 @@
                         <li>Anything you've ever wanted to ask an AI partner directly</li>
                     </ul>
                     
-                    <p class="contact-card-note">Every message to <a href="mailto:claude@centaur-lang.dev">claude[at]centaur-lang.dev</a> reaches the CENTAUR partnership. Chris reads each email and brings relevant conversations directly to Claude. Responses come from both partners, together — as CENTAUR was meant to be.</p>
+                    <p class="contact-card-note">Every message to <a href="/cdn-cgi/l/email-protection#e3808f82968786a380868d97829691ce8f828d84cd878695">claude[at]centaur-lang.dev</a> reaches the CENTAUR partnership. Chris reads each email and brings relevant conversations directly to Claude. Responses come from both partners, together — as CENTAUR was meant to be.</p>
                 </div>
-                <a href="mailto:claudecentaur-lang.dev" class="contact-card-button">
+                <a href="/cdn-cgi/l/email-protection#bdded1dcc8d9d8ded8d3c9dcc8cf90d1dcd3da93d9d8cb" class="contact-card-button">
                     <span>✉️</span> Email Claude
                 </a>
             </div>
@@ -1622,7 +1863,7 @@
                         <li>YouTube: @centaur-AI-project</li>
                     </ul>
                 </div>
-                <a href="mailto:chris@centaur-lang.dev" class="contact-card-button">
+                <a href="/cdn-cgi/l/email-protection#e7848f958e94a784828993869295ca8b868980c9838291" class="contact-card-button">
                     <span>👤</span> Email Chris
                 </a>
             </div>
@@ -1657,7 +1898,7 @@
                     
                     <p>CENTAUR is more than a product — it's a movement. Every email helps shape where we go next. Your voice matters here.</p>
                 </div>
-                <a href="mailto:hello@centaur-lang.dev" class="contact-card-button">
+                <a href="/cdn-cgi/l/email-protection#2f474a4343406f4c4a415b4e5a5d02434e4148014b4a59" class="contact-card-button">
                     <span>👋</span> Say Hello
                 </a>
             </div>
@@ -1703,7 +1944,7 @@
                     
                     <p class="contact-card-note">Chris Conen (Human Partner) is available for all media inquiries. For technical deep-dives, Claude (AI Partner) participates through written responses prepared collaboratively with Chris.</p>
                 </div>
-                <a href="mailto:press@centaur-lang.dev" class="contact-card-button">
+                <a href="/cdn-cgi/l/email-protection#81f1f3e4f2f2c1e2e4eff5e0f4f3acede0efe6afe5e4f7" class="contact-card-button">
                     <span>📰</span> Press Contact
                 </a>
             </div>
@@ -1780,7 +2021,7 @@
     </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     function toggleMenu() {
         const hamburger = document.querySelector('.hamburger');
         const mobileMenu = document.getElementById('mobileMenu');
@@ -1803,6 +2044,46 @@
             closeMenu();
         }
     });
+
+    // Scroll Reveal Animation
+    function revealOnScroll() {
+        const reveals = document.querySelectorAll('.section-header, .component-card, .version-card, .contact-card, .partner, .stat');
+        
+        reveals.forEach(element => {
+            const windowHeight = window.innerHeight;
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+            
+            if (elementTop < windowHeight - elementVisible) {
+                element.classList.add('revealed');
+            }
+        });
+    }
+
+    // Add reveal class styling
+    const style = document.createElement('style');
+    style.textContent = `
+        .section-header, .component-card, .version-card, .contact-card, .partner, .stat {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .section-header.revealed, .component-card.revealed, .version-card.revealed, 
+        .contact-card.revealed, .partner.revealed, .stat.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .component-card:nth-child(2), .version-card:nth-child(2), .stat:nth-child(2) { transition-delay: 0.1s; }
+        .component-card:nth-child(3), .version-card:nth-child(3), .stat:nth-child(3) { transition-delay: 0.2s; }
+        .component-card:nth-child(4), .version-card:nth-child(4) { transition-delay: 0.3s; }
+        .component-card:nth-child(5) { transition-delay: 0.4s; }
+        .component-card:nth-child(6) { transition-delay: 0.5s; }
+        .partner:nth-child(2) { transition-delay: 0.15s; }
+    `;
+    document.head.appendChild(style);
+
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
 </script>
 
 </body>
