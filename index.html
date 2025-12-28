@@ -397,7 +397,7 @@
             border-radius: 50px;
             font-size: 0.85rem;
             color: var(--gold);
-            margin-bottom: 2rem 0;
+            margin: 2rem 0;
             animation: fadeInUp 0.8s ease;
         }
 
@@ -1173,7 +1173,7 @@
         }
     }
 
-        /* Newsletter Signup Section */
+        * Newsletter Signup Section */
         .newsletter {
             padding: 5rem 4rem;
             background: var(--bg-secondary);
@@ -1258,6 +1258,38 @@
             margin-top: 1rem;
             font-size: 0.8rem;
             color: var(--text-muted);
+        }
+
+        .newsletter-success {
+            display: none !important;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            padding: 1rem 2rem;
+            background: rgba(39, 202, 64, 0.15);
+            border: 1px solid #27CA40;
+            border-radius: 8px;
+            color: #27CA40;
+            font-weight: 500;
+        }
+
+        .newsletter-success.show {
+            display: flex !important;
+        }
+
+        .newsletter-success svg {
+            flex-shrink: 0;
+            stroke: #27CA40;
+        }
+
+        .newsletter-form.loading button {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        .newsletter-form.success {
+            display: none;
         }
 
         @media (max-width: 550px) {
@@ -2470,10 +2502,10 @@
             });
             
             if (response.ok) {
-                // Success!
-                newsletterForm.classList.add('success');
-                newsletterNote.style.display = 'none';
-                newsletterSuccess.classList.add('show');
+                // Success! - Hide form, show success message
+                newsletterForm.style.display = 'none';
+                document.getElementById('newsletterNote').style.display = 'none';
+                newsletterSuccess.style.display = 'flex';
             } else {
                 throw new Error('Submission failed');
             }
