@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTAUR LANG — The World's First Human+AI Programming Language</title>
+    <meta name="description" content="Transform natural language into production-ready code. CENTAUR LANG bridges human creativity and AI capability.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4D03F;
+            --gold-dark: #B8960C;
+            --bg-primary: #0A0A0F;
+            --bg-secondary: #12121A;
+            --bg-card: #1A1A25;
+            --bg-code: #0D0D12;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0A0B0;
+            --text-muted: #6A6A7A;
+            --accent-red: #E94560;
+            --gradient-gold: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            --glow-gold: 0 0 60px rgba(212, 175, 55, 0.3);
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Space Grotesk', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Noise Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.5rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            padding: 0.75rem 1.75rem;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            background: var(--gold);
+            color: var(--bg-primary);
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge::before {
+            content: '🐴';
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease 0.1s both;
+        }
+
+        .hero h1 .highlight {
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-tagline {
+            font-family: var(--font-display);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-style: italic;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease 0.3s both;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: var(--gradient-gold);
+            color: var(--bg-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-gold);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 80px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        /* Stats */
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 8rem 4rem;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .demo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .demo-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-panel {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .demo-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .demo-panel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .demo-panel-dot.red { background: #FF5F56; }
+        .demo-panel-dot.yellow { background: #FFBD2E; }
+        .demo-panel-dot.green { background: #27CA40; }
+
+        .demo-panel-title {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .demo-panel-content {
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            min-height: 350px;
+        }
+
+        .code-directive { color: var(--accent-red); }
+        .code-value { color: var(--gold-light); }
+        .code-comment { color: var(--text-muted); }
+        .code-string { color: #98C379; }
+
+        .demo-output {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: var(--bg-card);
+        }
+
+        .demo-form {
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .demo-form-group {
+            margin-bottom: 1rem;
+        }
+
+        .demo-form label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-form input,
+        .demo-form textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .demo-form input:focus,
+        .demo-form textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .demo-form button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 8px;
+            color: var(--bg-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-form button:hover {
+            box-shadow: var(--glow-gold);
+        }
+
+        /* Components Section */
+        .components {
+            padding: 8rem 4rem;
+            background: var(--bg-primary);
+        }
+
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .component-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-gold);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .component-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .component-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .component-name {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .component-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .component-version {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            color: var(--gold);
+        }
+
+        .component-version.new {
+            background: rgba(233, 69, 96, 0.1);
+            color: var(--accent-red);
+        }
+
+        /* HACP Section */
+        .hacp {
+            padding: 8rem 4rem;
+            background: var(--bg-secondary);
+            position: relative;
+        }
+
+        .hacp-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hacp-content h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hacp-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hacp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+        }
+
+        .hacp-badge-icon {
+            font-size: 1.5rem;
+        }
+
+        .hacp-badge-text {
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .hacp-visual {
+            background: var(--bg-code);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        /* Partners Section */
+        .partners {
+            padding: 6rem 4rem;
+            background: var(--bg-primary);
+            text-align: center;
+        }
+
+        .partners-grid {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .partner {
+            text-align: center;
+        }
+
+        .partner-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid var(--gold);
+            padding: 4px;
+            background: var(--bg-card);
+        }
+
+        .partner-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .partner-name {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .partner-role {
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 0.25rem;
+        }
+
+        .partner-company {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 4rem;
+            background: var(--gradient-dark);
+            text-align: center;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cta p {
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+        }
+
+        .footer-brand span {
+            color: var(--gold);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            nav {
+                padding: 1rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .demo {
+                padding: 4rem 1.5rem;
+            }
+
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
+
+            .components {
+                padding: 4rem 1.5rem;
+            }
+
+            .hacp {
+                padding: 4rem 1.5rem;
+            }
+
+            .hacp-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .partners-grid {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+    <a href="#" class="nav-logo">🐴 CENTAUR <span>LANG</span></a>
+    <ul class="nav-links">
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#components">Components</a></li>
+        <li><a href="#hacp">HACP</a></li>
+        <li><a href="https://github.com/Centaur-Lang/centaur-lang">GitHub</a></li>
+    </ul>
+    <a href="https://github.com/Centaur-Lang/centaur-lang" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-badge">Human+AI Programming Language</div>
+    <h1>CENTAUR <span class="highlight">LANG</span></h1>
+    <p class="hero-tagline">"Neither human alone, nor AI alone — but something greater together."</p>
+    
+    <div class="hero-buttons">
+        <a href="https://youtu.be/BcyD2Q4g8q0" class="btn-primary">
+            <span>▶</span> Watch Video
+        </a>
+        <a href="https://github.com/Centaur-Lang/centaur-lang" class="btn-secondary">
+            <span>⌘</span> View on GitHub
+        </a>
+    </div>
+
+    <div class="hero-stats">
+        <div class="stat">
+            <div class="stat-number">13</div>
+            <div class="stat-label">Components</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">3,295</div>
+            <div class="stat-label">Lines of Code</div>
+        </div>
+        <div class="stat">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Partners</div>
+        </div>
+    </div>
+</section>
+
+<!-- Demo Section -->
+<section class="demo" id="demo">
+    <div class="section-header">
+        <span class="section-label">See It In Action</span>
+        <h2 class="section-title">Write Natural Language. Get Production Code.</h2>
+        <p class="section-subtitle">Describe what you want in plain English. CENTAUR compiles it into clean HTML, CSS, and JavaScript.</p>
+    </div>
+
+    <div class="demo-container">
+        <div class="demo-panel">
+            <div class="demo-panel-header">
+                <span class="demo-panel-dot red"></span>
+                <span class="demo-panel-dot yellow"></span>
+                <span class="demo-panel-dot green"></span>
+                <span class="demo-panel-title">ContactForm.centaur</span>
+            </div>
+            <div class="demo-panel-content">
+                <span class="code-directive">@component</span> <span class="code-value">ContactForm</span><br>
+                <span class="code-directive">@type</span> <span class="code-value">form</span><br>
+                <span class="code-directive">@theme</span> <span class="code-value">dark</span><br><br>
+                {<br>
+                &nbsp;&nbsp;<span class="code-string">Create a contact form with</span><br>
+                &nbsp;&nbsp;<span class="code-string">name field</span><br>
+                &nbsp;&nbsp;<span class="code-string">email field</span><br>
+                &nbsp;&nbsp;<span class="code-string">message textarea</span><br>
+                &nbsp;&nbsp;<span class="code-string">submit button "Send Message"</span><br>
+                }<br><br>
+                <span class="code-comment">// That's it. No HTML. No CSS.</span><br>
+                <span class="code-comment">// Just describe what you want.</span>
+            </div>
+        </div>
+
+        <div class="demo-panel">
+            <div class="demo-panel-header">
+                <span class="demo-panel-dot red"></span>
+                <span class="demo-panel-dot yellow"></span>
+                <span class="demo-panel-dot green"></span>
+                <span class="demo-panel-title">Output Preview</span>
+            </div>
+            <div class="demo-output">
+                <form class="demo-form" onsubmit="event.preventDefault(); alert('Message sent!');">
+                    <div class="demo-form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Enter your name">
+                    </div>
+                    <div class="demo-form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Enter your email">
+                    </div>
+                    <div class="demo-form-group">
+                        <label>Message</label>
+                        <textarea rows="3" placeholder="Enter your message"></textarea>
+                    </div>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Components Section -->
+<section class="components" id="components">
+    <div class="section-header">
+        <span class="section-label">v0.4.0</span>
+        <h2 class="section-title">13 Production-Ready Components</h2>
+        <p class="section-subtitle">From forms to carousels, everything you need to build modern interfaces.</p>
+    </div>
+
+    <div class="components-grid">
+        <div class="component-card">
+            <div class="component-icon">📝</div>
+            <div class="component-name">Form</div>
+            <div class="component-desc">Contact forms, login forms, surveys with validation</div>
+            <span class="component-version">v0.1.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🦸</div>
+            <div class="component-name">Hero</div>
+            <div class="component-desc">Landing page hero sections with CTA buttons</div>
+            <span class="component-version">v0.2.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🃏</div>
+            <div class="component-name">Card</div>
+            <div class="component-desc">Content cards with images and actions</div>
+            <span class="component-version">v0.2.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🧭</div>
+            <div class="component-name">Navigation</div>
+            <div class="component-desc">Responsive navbar with mobile menu</div>
+            <span class="component-version">v0.2.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">💬</div>
+            <div class="component-name">Modal</div>
+            <div class="component-desc">Popup dialogs with confirm/cancel</div>
+            <span class="component-version">v0.3.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">📊</div>
+            <div class="component-name">Table</div>
+            <div class="component-desc">Data tables with search & sorting</div>
+            <span class="component-version">v0.3.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🦶</div>
+            <div class="component-name">Footer</div>
+            <div class="component-desc">Multi-column footers with social links</div>
+            <span class="component-version">v0.3.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🖼️</div>
+            <div class="component-name">Gallery</div>
+            <div class="component-desc">Image galleries with lightbox</div>
+            <span class="component-version">v0.3.0</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🪗</div>
+            <div class="component-name">Accordion</div>
+            <div class="component-desc">Collapsible FAQ sections</div>
+            <span class="component-version new">v0.4.0 NEW</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">📑</div>
+            <div class="component-name">Tabs</div>
+            <div class="component-desc">Tabbed content interface</div>
+            <span class="component-version new">v0.4.0 NEW</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">🎠</div>
+            <div class="component-name">Carousel</div>
+            <div class="component-desc">Image sliders with autoplay</div>
+            <span class="component-version new">v0.4.0 NEW</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">💰</div>
+            <div class="component-name">Pricing</div>
+            <div class="component-desc">Pricing tables with plans</div>
+            <span class="component-version new">v0.4.0 NEW</span>
+        </div>
+        <div class="component-card">
+            <div class="component-icon">⭐</div>
+            <div class="component-name">Testimonial</div>
+            <div class="component-desc">Customer reviews & quotes</div>
+            <span class="component-version new">v0.4.0 NEW</span>
+        </div>
+    </div>
+</section>
+
+<!-- HACP Section -->
+<section class="hacp" id="hacp">
+    <div class="hacp-container">
+        <div class="hacp-content">
+            <h2>Human+AI Code Protocol</h2>
+            <p>Every component generated by CENTAUR LANG includes transparent attribution through HACP — documenting exactly who contributed what.</p>
+            <p>No hidden AI. No deception. Just honest collaboration between human creativity and AI capability.</p>
+            <div class="hacp-badge">
+                <span class="hacp-badge-icon">🤝</span>
+                <span class="hacp-badge-text">HACP Certified Code</span>
+            </div>
+        </div>
+        <div class="hacp-visual">
+            <span class="code-comment">/**</span><br>
+            <span class="code-comment">&nbsp;* Human+AI Code Protocol (HACP)</span><br>
+            <span class="code-comment">&nbsp;* ─────────────────────────────</span><br>
+            <span class="code-comment">&nbsp;* Human Partner: <span style="color: var(--gold)">Chris Conen</span></span><br>
+            <span class="code-comment">&nbsp;* AI Partner: <span style="color: var(--gold)">Claude (Anthropic)</span></span><br>
+            <span class="code-comment">&nbsp;* Partnership: <span style="color: var(--gold)">CENTAUR</span></span><br>
+            <span class="code-comment">&nbsp;* ─────────────────────────────</span><br>
+            <span class="code-comment">&nbsp;* Human: Vision, Testing, Feedback</span><br>
+            <span class="code-comment">&nbsp;* AI: Implementation, Generation</span><br>
+            <span class="code-comment">&nbsp;*/</span>
+        </div>
+    </div>
+</section>
+
+<!-- Partners Section -->
+<section class="partners">
+    <div class="section-header">
+        <span class="section-label">The Partnership</span>
+        <h2 class="section-title">Created by Human + AI</h2>
+    </div>
+
+    <div class="partners-grid">
+        <div class="partner">
+            <div class="partner-avatar">
+                <img src="https://australianweb.agency/img/website_design_sydney_team.webp" width="200" height="202" alt="Chris Conen">
+            </div>
+            <div class="partner-name">Chris Conen</div>
+            <div class="partner-role">Human Partner</div>
+            <div class="partner-company">Founder & CEO</div>
+        </div>
+        <div class="partner">
+            <div class="partner-avatar" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 3rem;">🐴</span>
+            </div>
+            <div class="partner-name">Claude</div>
+            <div class="partner-role">AI Partner</div>
+            <div class="partner-company">Co-Founder & CTO</div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta">
+    <h2>Start Building with CENTAUR LANG</h2>
+    <p>Join the Human+AI revolution. Write natural language, get production code.</p>
+    <div class="cta-buttons">
+        <a href="https://github.com/Centaur-Lang/centaur-lang" class="btn-primary">
+            Get Started Free
+        </a>
+        <a href="https://centaur.australianweb.agency" class="btn-secondary">
+            Read the Manifesto
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-content">
+        <div class="footer-brand">
+            🐴 CENTAUR <span>LANG</span>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/Centaur-Lang/centaur-lang">GitHub</a>
+            <a href="https://youtu.be/BcyD2Q4g8q0">YouTube</a>
+            <a href="https://centaur.australianweb.agency">Manifesto</a>
+            <a href="https://x.com/aspect_centaur">X / Twitter</a>
+        </div>
+        <div class="footer-copy">
+            © 2025 CENTAUR Partnership. MIT License.
+        </div>
+    </div>
+</footer>
+
+<script>
+// Smooth reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.component-card, .section-header').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+
+console.log('🐴 CENTAUR LANG v0.4.0');
+console.log('Human: Chris Conen | AI: Claude (Anthropic)');
+console.log('"Neither human alone, nor AI alone — but something greater together."');
+</script>
+
+</body>
+</html>
