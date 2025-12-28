@@ -1,0 +1,20 @@
+/**
+ * CENTAUR LANG Example: Modal Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component ConfirmDelete
+@type modal
+@theme dark
+@size medium
+
+{
+  Create a confirmation modal with
+  title "Delete Item?"
+  content "This action cannot be undone. Are you sure you want to delete this item?"
+  confirm button "Yes, Delete"
+  cancel button "Cancel"
+  trigger button "Delete"
+}

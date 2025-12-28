@@ -1,0 +1,23 @@
+/**
+ * CENTAUR LANG Example: Gallery Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component PortfolioGallery
+@type gallery
+@theme dark
+
+{
+  Create a 3-column image gallery
+  with lightbox support
+  hover captions
+  
+  - Website Redesign Project
+  - Mobile App UI Design
+  - Brand Identity System
+  - E-commerce Platform
+  - Dashboard Analytics
+  - Marketing Campaign
+}

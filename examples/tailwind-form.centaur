@@ -1,0 +1,24 @@
+/**
+ * CENTAUR LANG Example: Tailwind CSS Output
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ * 
+ * Use @style tailwind to generate Tailwind CSS classes
+ * instead of vanilla CSS
+ */
+
+@component ContactForm
+@type form
+@theme dark
+@style tailwind
+
+{
+  Create a contact form with
+  name field
+  email field
+  phone field
+  company field
+  message textarea
+  submit button "Send Message"
+}

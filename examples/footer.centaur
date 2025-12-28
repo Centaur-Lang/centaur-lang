@@ -1,0 +1,39 @@
+/**
+ * CENTAUR LANG Example: Footer Component
+ * 
+ * Human+AI Code Protocol (HACP)
+ * Human: Chris Conen | AI: Claude (Anthropic)
+ */
+
+@component SiteFooter
+@type footer
+@theme dark
+
+{
+  Create a multi-column footer with
+  copyright "© 2025 CENTAUR. All rights reserved."
+  social links: github, twitter, youtube, linkedin
+  
+  ## Company
+  - About Us
+  - Our Team
+  - Careers
+  - Contact
+  
+  ## Products
+  - CENTAUR LANG
+  - Documentation
+  - Examples
+  - Pricing
+  
+  ## Resources
+  - Blog
+  - Tutorials
+  - Community
+  - Support
+  
+  ## Legal
+  - Privacy Policy
+  - Terms of Service
+  - License
+}
