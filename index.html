@@ -2501,19 +2501,26 @@
                 body: JSON.stringify({ email: email })
             });
             
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+            
+            const data = await response.json();
+            console.log('Response data:', data);
+            
             if (response.ok) {
                 // Success! - Hide form, show success message
                 newsletterForm.style.display = 'none';
                 document.getElementById('newsletterNote').style.display = 'none';
                 newsletterSuccess.style.display = 'flex';
             } else {
-                throw new Error('Submission failed');
+                throw new Error('Submission failed: ' + response.status);
             }
         } catch (error) {
             // Error handling
+            console.error('Newsletter error:', error);
             newsletterBtn.textContent = 'Try Again';
             newsletterForm.classList.remove('loading');
-            alert('Something went wrong. Please try again.');
+            alert('Error: ' + error.message);
         }
     });
 </script>
