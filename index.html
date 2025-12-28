@@ -641,12 +641,30 @@
     }
     
     .contact-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    }
+
+    /* Tablet - még mindig 2 oszlop */
+    @media (max-width: 900px) {
+        .contact-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            padding: 0 1.5rem;
+        }
+    }
+    
+    /* Mobil - 1 oszlop */
+    @media (max-width: 650px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            padding: 0 1rem;
+        }
     }
     
     .contact-card {
