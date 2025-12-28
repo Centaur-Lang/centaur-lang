@@ -8,6 +8,7 @@ CENTAUR LANG is the world's first Human+AI programming language, born from the C
 
 - [Code of Conduct](#code-of-conduct)
 - [How Can I Contribute?](#how-can-i-contribute)
+- [Current Components](#current-components)
 - [Development Setup](#development-setup)
 - [Coding Guidelines](#coding-guidelines)
 - [HACP Attribution](#hacp-attribution)
@@ -36,13 +37,49 @@ We expect all contributors to:
 - Show example input/output if possible
 
 ### 🔧 Code Contributions
+
 Great areas to contribute:
-- **New component types** (Hero, Card, Modal, etc.)
-- **New themes and color schemes**
-- **Parser improvements** for better natural language understanding
-- **Output targets** (React, Vue, Svelte)
-- **Documentation and examples**
-- **CLI improvements**
+
+**New Components (v0.5.0+)**
+- Breadcrumbs
+- Progress Bar
+- Alert/Notification
+- Timeline
+- Stats/Counter
+- Feature Grid
+
+**Output Targets**
+- React JSX generation
+- Vue SFC generation
+- Svelte component generation
+
+**Parser Improvements**
+- Better natural language understanding
+- More flexible syntax recognition
+- Fuzzy matching improvements
+
+**Documentation**
+- More examples
+- Tutorial content
+- Video guides
+
+## 📦 Current Components (v0.4.0)
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Form | ✅ Stable | v0.1.0 |
+| Hero | ✅ Stable | v0.2.0 |
+| Card | ✅ Stable | v0.2.0 |
+| Navigation | ✅ Stable | v0.2.0 |
+| Modal | ✅ Stable | v0.3.0 |
+| Table | ✅ Stable | v0.3.0 |
+| Footer | ✅ Stable | v0.3.0 |
+| Gallery | ✅ Stable | v0.3.0 |
+| Accordion | ✅ Stable | v0.4.0 |
+| Tabs | ✅ Stable | v0.4.0 |
+| Carousel | ✅ Stable | v0.4.0 |
+| Pricing | ✅ Stable | v0.4.0 |
+| Testimonial | ✅ Stable | v0.4.0 |
 
 ## 💻 Development Setup
 
@@ -53,17 +90,22 @@ cd centaur-lang
 
 # No dependencies to install! Pure JavaScript.
 
-# Test the CLI
-node bin/centaur.js --help
+# Open demo.html in browser to test
+open demo.html
 
-# Compile an example
-node bin/centaur.js compile examples/ContactForm.centaur examples/dist
-
-# Create a test project
-node bin/centaur.js init my-test-project
+# Or use a local server
+python -m http.server 8000
+# Then visit http://localhost:8000/demo.html
 ```
 
-## 📐 Coding Guidelines
+### Testing Your Changes
+
+1. Open `demo.html` in your browser
+2. Write CENTAUR code in the editor
+3. Click "Compile" to see output
+4. Check HTML, CSS, and JS tabs
+
+## 📝 Coding Guidelines
 
 ### JavaScript Style
 - Use ES6+ features (const/let, arrow functions, template literals)
@@ -71,18 +113,53 @@ node bin/centaur.js init my-test-project
 - Keep functions focused and small
 - Use meaningful variable names
 
-### CENTAUR Source Files
-- Use descriptive directive names
-- Keep intent blocks readable
-- Test with multiple themes/accents
+### Adding a New Component
+
+1. **Add to constructor** in `compiler.js`:
+```javascript
+this.components = {
+    // ... existing components
+    mycomponent: this.generateMyComponent.bind(this)
+};
+```
+
+2. **Add parser function**:
+```javascript
+parseMyComponentDescription(component, desc, lines) {
+    // Parse natural language
+}
+```
+
+3. **Add to parseNaturalLanguage switch**:
+```javascript
+case 'mycomponent':
+    this.parseMyComponentDescription(component, desc, lines);
+    break;
+```
+
+4. **Add to detectComponentType patterns**:
+```javascript
+mycomponent: [/mycomponent/i, /related-term/i]
+```
+
+5. **Create generator function**:
+```javascript
+generateMyComponent(component) {
+    const isDark = component.theme === 'dark';
+    const useTailwind = component.style === 'tailwind';
+    // Generate HTML, CSS, JS
+    return { html, css, js };
+}
+```
 
 ### Commit Messages
 Use clear, descriptive commit messages:
 ```
-feat: add Hero component generator
-fix: correct button text parsing in forms
-docs: update README with new examples
-style: improve CLI color output
+feat: add Breadcrumbs component generator
+fix: correct carousel autoplay timing
+docs: update README with v0.4.0 components
+style: improve accordion animation
+refactor: extract common CSS generation
 ```
 
 ## 🏷️ HACP Attribution
@@ -113,6 +190,15 @@ The key is **transparency** — be honest about how the code was created.
 5. **Push** to your fork
 6. **Open a Pull Request** using the PR template
 
+### PR Checklist
+
+- [ ] Code follows the project style
+- [ ] New component works with both dark and light themes
+- [ ] New component works with both vanilla and Tailwind output
+- [ ] Demo page updated (if applicable)
+- [ ] README updated (if new feature)
+- [ ] HACP attribution included
+
 ### PR Review Process
 - Maintainers will review your PR
 - We may suggest changes or improvements
@@ -124,15 +210,25 @@ The key is **transparency** — be honest about how the code was created.
 All contributors are recognized in our:
 - README.md contributors section
 - Release notes
-- Website credits (coming soon)
+- Website credits
 
 ---
 
 ## Questions?
 
 - Open a [Discussion](https://github.com/centaur-lang/centaur-lang/discussions)
-- Email: info@pixella.at
-- Twitter: @centaurlang (coming soon)
+- Email: info@australianweb.agency
+- X/Twitter: [@aspect_centaur](https://x.com/aspect_centaur)
+
+---
+
+## 📊 Project Stats (v0.4.0)
+
+| Metric | Value |
+|--------|-------|
+| Components | 13 |
+| Lines of Code | 3,295 |
+| Open for Contributions | ✅ Yes |
 
 ---
 
