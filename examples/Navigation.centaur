@@ -1,0 +1,11 @@
+@component Navigation
+@theme dark
+@accent gold
+
+{
+  Create a navigation bar with:
+  
+  - Logo: "CENTAUR"
+  - Links: Home, Features, Pricing, About, Contact
+  - CTA button: "Get Started"
+}

@@ -1,0 +1,13 @@
+@component ProductCard
+@theme dark
+@accent emerald
+
+{
+  Create a product card with:
+  
+  - Badge: "Best Seller"
+  - Title: "Premium Package"
+  - Description: "Everything you need to succeed"
+  - Price: "$99.00"
+  - Button: "Add to Cart"
+}

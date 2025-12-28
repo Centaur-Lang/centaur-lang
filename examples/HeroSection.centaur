@@ -1,0 +1,13 @@
+@component HeroSection
+@theme dark
+@accent gold
+
+{
+  Create a hero section with:
+  
+  - Badge: "New Release"
+  - Headline: "Build Faster Than Ever"
+  - Subheadline: "The modern way to create stunning web applications"
+  - Primary button: "Get Started"
+  - Secondary button: "Learn More"
+}
