@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTAUR LANG v0.4.0 Demo — 13 Components!</title>
+    <style>
+        :root { --bg-dark: #0f0f1a; --bg-card: #1a1a2e; --accent: #e94560; --gold: #ffd700; --blue: #3b82f6; --text: #fff; --text-muted: #a0a0b0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg-dark); color: var(--text); line-height: 1.6; }
+        .header { background: linear-gradient(135deg, var(--bg-card), #16213e); padding: 3rem 2rem; text-align: center; }
+        .header h1 { font-size: 2.5rem; } .header h1 span { color: var(--gold); }
+        .version { color: var(--accent); font-weight: bold; font-size: 1.5rem; margin: 0.5rem 0; }
+        .stats { display: flex; justify-content: center; gap: 2rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .stat-number { font-size: 2.5rem; font-weight: bold; color: var(--gold); }
+        .stat-label { font-size: 0.9rem; color: var(--text-muted); }
+        .badge-new { background: var(--gold); color: #000; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-left: 0.5rem; }
+        .nav { background: var(--bg-card); padding: 1rem; position: sticky; top: 0; z-index: 100; display: flex; justify-content: center; flex-wrap: wrap; gap: 0.5rem; }
+        .nav a { color: var(--text-muted); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; } .nav a:hover { background: var(--accent); color: #fff; }
+        .section { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; border-bottom: 1px solid #222; }
+        .section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; } .section .desc { color: var(--text-muted); margin-bottom: 2rem; }
+        /* Accordion */ .centaur-accordion { background: var(--bg-card); border-radius: 12px; overflow: hidden; }
+        .centaur-accordion-item { border-bottom: 1px solid #333; } .centaur-accordion-item:last-child { border-bottom: none; }
+        .centaur-accordion-trigger { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; background: none; border: none; color: #fff; font-size: 1rem; font-weight: 600; cursor: pointer; text-align: left; }
+        .centaur-accordion-trigger:hover { background: #16213e; }
+        .centaur-accordion-icon { transition: transform 0.3s; } .centaur-accordion-item.active .centaur-accordion-icon { transform: rotate(180deg); }
+        .centaur-accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+        .centaur-accordion-item.active .centaur-accordion-content { max-height: 300px; }
+        .centaur-accordion-inner { padding: 0 1.5rem 1.25rem; color: var(--text-muted); }
+        /* Tabs */ .centaur-tabs { background: var(--bg-card); border-radius: 12px; overflow: hidden; }
+        .centaur-tab-list { display: flex; background: #16213e; } .centaur-tab-btn { padding: 1rem 1.5rem; background: none; border: none; color: var(--text-muted); font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; }
+        .centaur-tab-btn:hover { background: #333; } .centaur-tab-btn.active { background: var(--blue); color: #fff; }
+        .centaur-tab-panel { display: none; padding: 1.5rem; } .centaur-tab-panel.active { display: block; }
+        /* Carousel */ .centaur-carousel { position: relative; border-radius: 12px; overflow: hidden; }
+        .centaur-slide { display: none; position: relative; } .centaur-slide.active { display: block; }
+        .centaur-slide img { width: 100%; height: 350px; object-fit: cover; }
+        .centaur-slide-caption { position: absolute; bottom: 0; left: 0; right: 0; padding: 2rem; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .centaur-slide-caption h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .centaur-prev, .centaur-next { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: none; border-radius: 50%; color: #fff; font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .centaur-prev { left: 1rem; } .centaur-next { right: 1rem; }
+        .centaur-dots { position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; }
+        .centaur-dot { width: 12px; height: 12px; border-radius: 50%; border: none; background: rgba(255,255,255,0.5); cursor: pointer; } .centaur-dot.active { background: #fff; }
+        /* Pricing */ .centaur-pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; } @media (max-width: 900px) { .centaur-pricing-grid { grid-template-columns: 1fr; } }
+        .centaur-pricing-card { background: var(--bg-card); border-radius: 16px; padding: 2.5rem; text-align: center; position: relative; border: 1px solid #333; transition: transform 0.3s; }
+        .centaur-pricing-card:hover { transform: translateY(-8px); } .centaur-pricing-card.highlighted { border: 2px solid var(--blue); transform: scale(1.05); }
+        .popular-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--blue); color: #fff; padding: 0.25rem 1rem; border-radius: 50px; font-size: 0.85rem; }
+        .plan-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; } .plan-price { font-size: 3rem; font-weight: 800; } .plan-price span { font-size: 1rem; opacity: 0.7; }
+        .plan-features { list-style: none; margin: 2rem 0; text-align: left; } .plan-features li { padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; } .plan-features .check { color: #22c55e; }
+        .plan-button { width: 100%; padding: 1rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; background: #333; color: #fff; } .centaur-pricing-card.highlighted .plan-button { background: var(--blue); }
+        /* Testimonials */ .centaur-testimonials-container { max-width: 600px; margin: 0 auto; }
+        .centaur-testimonial-card { background: var(--bg-card); padding: 2rem; border-radius: 16px; display: none; } .centaur-testimonial-card.active { display: block; }
+        .stars { color: #fbbf24; font-size: 1.25rem; margin-bottom: 1rem; }
+        blockquote { font-size: 1.1rem; margin-bottom: 1.5rem; font-style: italic; color: var(--text-muted); }
+        .author-info { display: flex; align-items: center; gap: 1rem; } .author-info img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+        .author-name { font-weight: 700; } .author-role { font-size: 0.9rem; color: var(--text-muted); }
+        .centaur-testimonial-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem; }
+        .centaur-testimonial-dot { width: 12px; height: 12px; border-radius: 50%; border: none; background: #333; cursor: pointer; } .centaur-testimonial-dot.active { background: var(--accent); }
+        .footer { background: var(--bg-card); text-align: center; padding: 3rem 2rem; margin-top: 4rem; } .footer p { color: var(--text-muted); } .footer a { color: var(--accent); }
+    </style>
+</head>
+<body>
+<header class="header">
+    <h1>🐴 CENTAUR <span>LANG</span></h1>
+    <div class="version">v0.4.0</div>
+    <p style="color: var(--text-muted)">"Neither human alone, nor AI alone — but something greater together."</p>
+    <div class="stats">
+        <div class="stat"><div class="stat-number">13</div><div class="stat-label">Components</div></div>
+        <div class="stat"><div class="stat-number">3295</div><div class="stat-label">Lines of Code</div></div>
+        <div class="stat"><div class="stat-number">2</div><div class="stat-label">Partners</div></div>
+    </div>
+</header>
+<nav class="nav">
+    <a href="#accordion">Accordion<span class="badge-new">NEW</span></a>
+    <a href="#tabs">Tabs<span class="badge-new">NEW</span></a>
+    <a href="#carousel">Carousel<span class="badge-new">NEW</span></a>
+    <a href="#pricing">Pricing<span class="badge-new">NEW</span></a>
+    <a href="#testimonial">Testimonial<span class="badge-new">NEW</span></a>
+</nav>
+<section class="section" id="accordion">
+    <h2>Accordion / FAQ<span class="badge-new">NEW</span></h2>
+    <p class="desc">Collapsible sections for FAQs</p>
+    <div id="demo-accordion" class="centaur-accordion">
+        <div class="centaur-accordion-item active"><button class="centaur-accordion-trigger"><span>What is CENTAUR LANG?</span><span class="centaur-accordion-icon">▼</span></button><div class="centaur-accordion-content"><div class="centaur-accordion-inner">CENTAUR LANG is the world's first Human+AI programming language. Created by Chris Conen (Human) and Claude (AI).</div></div></div>
+        <div class="centaur-accordion-item"><button class="centaur-accordion-trigger"><span>How does it work?</span><span class="centaur-accordion-icon">▼</span></button><div class="centaur-accordion-content"><div class="centaur-accordion-inner">Write simple directives and natural language, the compiler generates production-ready HTML, CSS, and JS.</div></div></div>
+        <div class="centaur-accordion-item"><button class="centaur-accordion-trigger"><span>Is it open source?</span><span class="centaur-accordion-icon">▼</span></button><div class="centaur-accordion-content"><div class="centaur-accordion-inner">Yes! MIT license. Visit github.com/Centaur-Lang/centaur-lang</div></div></div>
+    </div>
+</section>
+<section class="section" id="tabs">
+    <h2>Tabs<span class="badge-new">NEW</span></h2>
+    <p class="desc">Tabbed interface for organized content</p>
+    <div id="demo-tabs" class="centaur-tabs">
+        <div class="centaur-tab-list"><button class="centaur-tab-btn active" data-tab="0">Overview</button><button class="centaur-tab-btn" data-tab="1">Features</button><button class="centaur-tab-btn" data-tab="2">Start</button></div>
+        <div class="centaur-tab-panels">
+            <div class="centaur-tab-panel active" data-panel="0"><h3>Welcome to CENTAUR LANG</h3><p style="margin-top:1rem;color:var(--text-muted)">Natural language meets production code.</p></div>
+            <div class="centaur-tab-panel" data-panel="1"><h3>Key Features</h3><p style="margin-top:1rem;color:var(--text-muted)">13 components, NL parsing, Dark/Light themes, Tailwind support, HACP Protocol</p></div>
+            <div class="centaur-tab-panel" data-panel="2"><h3>Quick Start</h3><p style="margin-top:1rem;color:var(--text-muted)">1. Include compiler.js<br>2. Write .centaur<br>3. Compile!</p></div>
+        </div>
+    </div>
+</section>
+<section class="section" id="carousel">
+    <h2>Carousel<span class="badge-new">NEW</span></h2>
+    <p class="desc">Image sliders with autoplay</p>
+    <div id="demo-carousel" class="centaur-carousel">
+        <div class="centaur-slides">
+            <div class="centaur-slide active" data-slide="0"><img src="https://picsum.photos/900/400?random=10" alt="Slide 1"><div class="centaur-slide-caption"><h3>Human + AI Partnership</h3></div></div>
+            <div class="centaur-slide" data-slide="1"><img src="https://picsum.photos/900/400?random=11" alt="Slide 2"><div class="centaur-slide-caption"><h3>Natural Language to Code</h3></div></div>
+            <div class="centaur-slide" data-slide="2"><img src="https://picsum.photos/900/400?random=12" alt="Slide 3"><div class="centaur-slide-caption"><h3>13 Components</h3></div></div>
+        </div>
+        <button class="centaur-prev">&#10094;</button><button class="centaur-next">&#10095;</button>
+        <div class="centaur-dots"><button class="centaur-dot active" data-dot="0"></button><button class="centaur-dot" data-dot="1"></button><button class="centaur-dot" data-dot="2"></button></div>
+    </div>
+</section>
+<section class="section" id="pricing">
+    <h2>Pricing<span class="badge-new">NEW</span></h2>
+    <p class="desc">Beautiful pricing cards</p>
+    <div class="centaur-pricing-grid">
+        <div class="centaur-pricing-card"><h3 class="plan-name">Starter</h3><div class="plan-price">$9<span>/mo</span></div><ul class="plan-features"><li><span class="check">✓</span>5 Projects</li><li><span class="check">✓</span>Basic Support</li><li><span class="check">✓</span>1GB Storage</li></ul><button class="plan-button">Start Free</button></div>
+        <div class="centaur-pricing-card highlighted"><div class="popular-badge">Popular</div><h3 class="plan-name">Pro</h3><div class="plan-price">$29<span>/mo</span></div><ul class="plan-features"><li><span class="check">✓</span>Unlimited Projects</li><li><span class="check">✓</span>Priority Support</li><li><span class="check">✓</span>10GB Storage</li><li><span class="check">✓</span>Analytics</li></ul><button class="plan-button">Get Started</button></div>
+        <div class="centaur-pricing-card"><h3 class="plan-name">Enterprise</h3><div class="plan-price">$99<span>/mo</span></div><ul class="plan-features"><li><span class="check">✓</span>Everything in Pro</li><li><span class="check">✓</span>24/7 Support</li><li><span class="check">✓</span>Unlimited Storage</li></ul><button class="plan-button">Contact Sales</button></div>
+    </div>
+</section>
+<section class="section" id="testimonial">
+    <h2>Testimonials<span class="badge-new">NEW</span></h2>
+    <p class="desc">Customer reviews carousel</p>
+    <div id="demo-testimonials" class="centaur-testimonials-container">
+        <div class="centaur-testimonial-card active" data-testimonial="0"><div class="stars">★★★★★</div><blockquote>"CENTAUR LANG transformed how we build components. Hours to minutes!"</blockquote><div class="author-info"><img src="https://i.pravatar.cc/100?img=1" alt="Sarah"><div><div class="author-name">Sarah Johnson</div><div class="author-role">Lead Developer</div></div></div></div>
+        <div class="centaur-testimonial-card" data-testimonial="1"><div class="stars">★★★★★</div><blockquote>"Natural language approach makes it accessible to designers. Game changer!"</blockquote><div class="author-info"><img src="https://i.pravatar.cc/100?img=2" alt="Michael"><div><div class="author-name">Michael Chen</div><div class="author-role">Design Director</div></div></div></div>
+        <div class="centaur-testimonial-card" data-testimonial="2"><div class="stars">★★★★★</div><blockquote>"Finally bridges the gap between human creativity and AI. Highly recommended!"</blockquote><div class="author-info"><img src="https://i.pravatar.cc/100?img=3" alt="Emma"><div><div class="author-name">Emma Williams</div><div class="author-role">Freelancer</div></div></div></div>
+        <div class="centaur-testimonial-dots"><button class="centaur-testimonial-dot active" data-dot="0"></button><button class="centaur-testimonial-dot" data-dot="1"></button><button class="centaur-testimonial-dot" data-dot="2"></button></div>
+    </div>
+</section>
+<footer class="footer"><p>🐴 <strong>CENTAUR LANG v0.4.0</strong></p><p>Human: Chris Conen | AI: Claude (Anthropic)</p><p style="margin-top:1rem"><a href="https://github.com/Centaur-Lang/centaur-lang">GitHub</a> · <a href="https://centaur-lang.dev">Website</a></p></footer>
+<script>
+document.querySelectorAll('.centaur-accordion-trigger').forEach(t=>t.addEventListener('click',()=>t.closest('.centaur-accordion-item').classList.toggle('active')));
+document.querySelectorAll('.centaur-tab-btn').forEach(b=>b.addEventListener('click',()=>{const tabs=b.closest('.centaur-tabs'),i=b.dataset.tab;tabs.querySelectorAll('.centaur-tab-btn').forEach(x=>x.classList.remove('active'));tabs.querySelectorAll('.centaur-tab-panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');tabs.querySelector('[data-panel="'+i+'"]').classList.add('active');}));
+(function(){const c=document.getElementById('demo-carousel'),s=c.querySelectorAll('.centaur-slide'),d=c.querySelectorAll('.centaur-dot');let i=0;const show=n=>{i=(n+s.length)%s.length;s.forEach((x,j)=>x.classList.toggle('active',j===i));d.forEach((x,j)=>x.classList.toggle('active',j===i));};c.querySelector('.centaur-prev').onclick=()=>show(i-1);c.querySelector('.centaur-next').onclick=()=>show(i+1);d.forEach((x,j)=>x.onclick=()=>show(j));setInterval(()=>show(i+1),5000);})();
+(function(){const c=document.getElementById('demo-testimonials'),cards=c.querySelectorAll('.centaur-testimonial-card'),d=c.querySelectorAll('.centaur-testimonial-dot');let i=0;const show=n=>{i=(n+cards.length)%cards.length;cards.forEach((x,j)=>x.classList.toggle('active',j===i));d.forEach((x,j)=>x.classList.toggle('active',j===i));};d.forEach((x,j)=>x.onclick=()=>show(j));setInterval(()=>show(i+1),6000);})();
+console.log('🐴 CENTAUR LANG v0.4.0 | 13 Components | Chris Conen + Claude');
+</script>
+</body>
+</html>
