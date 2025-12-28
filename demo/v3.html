@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTAUR LANG v0.3.0 Demo — Human+AI Programming Language</title>
+    <style>
+        :root {
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --accent: #e94560;
+            --gold: #ffd700;
+            --text: #ffffff;
+            --text-muted: #a0a0b0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, #16213e 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .header h1 { font-size: 2.5rem; }
+        .header h1 span { color: var(--gold); }
+        .header .version { color: var(--accent); font-weight: bold; margin: 0.5rem 0; }
+        .header .tagline { color: var(--text-muted); font-style: italic; }
+        .badge-new {
+            display: inline-block;
+            background: var(--gold);
+            color: black;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        .nav {
+            background: var(--bg-card);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .nav a:hover { background: var(--accent); color: white; }
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-bottom: 1px solid #222;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section .desc { color: var(--text-muted); margin-bottom: 2rem; }
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        .code-block .comment { color: #6a737d; }
+        .code-block .directive { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .output-area {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 200px;
+        }
+        /* Component Styles */
+        .centaur-form { max-width: 400px; margin: 0 auto; }
+        .centaur-form-group { margin-bottom: 1rem; }
+        .centaur-label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .centaur-input, .centaur-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: #16213e;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        .centaur-input:focus, .centaur-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .centaur-submit {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .centaur-submit:hover { background: #d63d5a; }
+        /* Modal */
+        .centaur-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .centaur-modal.active { display: flex; }
+        .centaur-modal-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+        }
+        .centaur-modal-container {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            animation: modalIn 0.3s ease;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .centaur-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+            border-bottom: 1px solid #333;
+        }
+        .centaur-modal-title { font-size: 1.25rem; font-weight: 700; }
+        .centaur-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .centaur-modal-close:hover { opacity: 1; }
+        .centaur-modal-body { padding: 1.5rem; }
+        .centaur-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-top: 1px solid #333;
+        }
+        .centaur-modal-btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .centaur-modal-cancel { background: #333; color: white; }
+        .centaur-modal-confirm { background: var(--accent); color: white; }
+        .modal-trigger {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        /* Table */
+        .centaur-table-wrapper {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        .centaur-table-search {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background: #16213e;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: white;
+        }
+        .centaur-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .centaur-table th, .centaur-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+        .centaur-table th { background: #16213e; font-weight: 600; }
+        .centaur-table tbody tr:hover { background: #16213e; }
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #4ade80;
+            color: #166534;
+            border-radius: 50px;
+            font-size: 0.85rem;
+        }
+        .status-badge.inactive { background: #f87171; color: #991b1b; }
+        /* Footer */
+        .centaur-footer {
+            background: var(--bg-card);
+            padding: 3rem 2rem;
+        }
+        .centaur-footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        .centaur-footer-section h4 { font-weight: 700; margin-bottom: 1rem; }
+        .centaur-footer-link {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+        }
+        .centaur-footer-link:hover { color: var(--accent); }
+        .centaur-footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .centaur-social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #333;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .centaur-social-link:hover { background: var(--accent); transform: translateY(-2px); }
+        .centaur-footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: var(--text-muted);
+        }
+        /* Gallery */
+        .centaur-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .centaur-gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .centaur-gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .centaur-gallery-item:hover img { transform: scale(1.1); }
+        .centaur-gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.75rem;
+            background: rgba(0,0,0,0.7);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .centaur-gallery-item:hover .centaur-gallery-caption { opacity: 1; }
+        /* What's New */
+        .whats-new {
+            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .whats-new h3 { color: var(--gold); margin-bottom: 1rem; }
+        .whats-new ul { list-style: none; }
+        .whats-new li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        .whats-new li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        /* HACP Banner */
+        .hacp-banner {
+            background: var(--bg-card);
+            border-left: 4px solid var(--gold);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .hacp-banner h4 { color: var(--gold); margin-bottom: 0.5rem; }
+        .hacp-banner p { color: var(--text-muted); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <h1>🐴 CENTAUR <span>LANG</span></h1>
+    <div class="version">v0.3.0</div>
+    <p class="tagline">"Neither human alone, nor AI alone — but something greater together."</p>
+</header>
+
+<!-- Navigation -->
+<nav class="nav">
+    <a href="#whats-new">What's New</a>
+    <a href="#form">Form</a>
+    <a href="#hero">Hero</a>
+    <a href="#card">Card</a>
+    <a href="#nav">Navigation</a>
+    <a href="#modal">Modal <span class="badge-new">NEW</span></a>
+    <a href="#table">Table <span class="badge-new">NEW</span></a>
+    <a href="#footer">Footer <span class="badge-new">NEW</span></a>
+    <a href="#gallery">Gallery <span class="badge-new">NEW</span></a>
+</nav>
+
+<!-- What's New Section -->
+<section class="section" id="whats-new">
+    <h2>🚀 What's New in v0.3.0</h2>
+    <p class="desc">Major update with 4 new components and Tailwind support!</p>
+    
+    <div class="whats-new">
+        <h3>✨ New Features</h3>
+        <ul>
+            <li><strong>Modal Component</strong> — Popup dialogs with customizable buttons</li>
+            <li><strong>Table Component</strong> — Data tables with search & hover effects</li>
+            <li><strong>Footer Component</strong> — Multi-column footers with social links</li>
+            <li><strong>Gallery Component</strong> — Image galleries with lightbox support</li>
+            <li><strong>@style Directive</strong> — Choose between vanilla CSS or Tailwind</li>
+            <li><strong>Enhanced NL Parsing</strong> — Better natural language recognition</li>
+        </ul>
+    </div>
+
+    <div class="hacp-banner">
+        <h4>🤝 Human+AI Code Protocol (HACP)</h4>
+        <p>Every component generated by CENTAUR LANG includes full attribution: Human Partner (Chris Conen) + AI Partner (Claude by Anthropic). Radical transparency in Human+AI collaboration.</p>
+    </div>
+</section>
+
+<!-- Modal Section (NEW) -->
+<section class="section" id="modal">
+    <h2>Modal Component <span class="badge-new">NEW</span></h2>
+    <p class="desc">Create popup dialogs with natural language</p>
+    
+    <div class="code-block">
+<span class="directive">@component</span> ConfirmDialog
+<span class="directive">@type</span> modal
+<span class="directive">@theme</span> dark
+<span class="directive">@size</span> medium
+
+{
+  <span class="string">Create a confirmation modal with
+  title "Are you sure?"
+  content "This action cannot be undone."
+  confirm button "Yes, Delete"
+  cancel button "Cancel"
+  trigger button "Delete Item"</span>
+}
+    </div>
+
+    <div class="output-area">
+        <button class="modal-trigger" onclick="document.getElementById('demo-modal').classList.add('active')">
+            Delete Item
+        </button>
+
+        <div id="demo-modal" class="centaur-modal">
+            <div class="centaur-modal-overlay" onclick="this.parentElement.classList.remove('active')"></div>
+            <div class="centaur-modal-container">
+                <div class="centaur-modal-header">
+                    <h3 class="centaur-modal-title">Are you sure?</h3>
+                    <button class="centaur-modal-close" onclick="document.getElementById('demo-modal').classList.remove('active')">&times;</button>
+                </div>
+                <div class="centaur-modal-body">
+                    <p>This action cannot be undone. All data will be permanently deleted.</p>
+                </div>
+                <div class="centaur-modal-footer">
+                    <button class="centaur-modal-btn centaur-modal-cancel" onclick="document.getElementById('demo-modal').classList.remove('active')">Cancel</button>
+                    <button class="centaur-modal-btn centaur-modal-confirm" onclick="alert('Deleted!'); document.getElementById('demo-modal').classList.remove('active')">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Table Section (NEW) -->
+<section class="section" id="table">
+    <h2>Table Component <span class="badge-new">NEW</span></h2>
+    <p class="desc">Data tables with search and styling options</p>
+    
+    <div class="code-block">
+<span class="directive">@component</span> UserTable
+<span class="directive">@type</span> table
+<span class="directive">@theme</span> dark
+<span class="directive">@columns</span> ID, Name, Email, Status
+
+{
+  <span class="string">Create a searchable data table
+  with hover effects
+  striped rows</span>
+}
+    </div>
+
+    <div class="output-area">
+        <div class="centaur-table-wrapper">
+            <input type="text" class="centaur-table-search" placeholder="Search..." id="table-search">
+            <table class="centaur-table" id="demo-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Chris Conen</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a6c5ced4cfd5e6c5c3c8d2c7d3d488c2c3d0">[email&#160;protected]</a></td><td><span class="status-badge">Active</span></td></tr>
+                    <tr><td>2</td><td>Claude AI</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="12717e7367767752737c667a607d627b713c717d7f">[email&#160;protected]</a></td><td><span class="status-badge">Active</span></td></tr>
+                    <tr><td>3</td><td>Jane Smith</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="254f444b4065405d44485549400b464a48">[email&#160;protected]</a></td><td><span class="status-badge">Active</span></td></tr>
+                    <tr><td>4</td><td>John Doe</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0963666167496c71686479656c276a6664">[email&#160;protected]</a></td><td><span class="status-badge inactive">Inactive</span></td></tr>
+                    <tr><td>5</td><td>Sarah Wilson</td><td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="becddfccdfd6fedbc6dfd3ced2db90ddd1d3">[email&#160;protected]</a></td><td><span class="status-badge">Active</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section (NEW) -->
+<section class="section" id="gallery">
+    <h2>Gallery Component <span class="badge-new">NEW</span></h2>
+    <p class="desc">Image galleries with hover effects</p>
+    
+    <div class="code-block">
+<span class="directive">@component</span> Portfolio
+<span class="directive">@type</span> gallery
+<span class="directive">@theme</span> dark
+
+{
+  <span class="string">Create a 3-column image gallery
+  with hover captions
+  - Project Alpha
+  - Project Beta
+  - Project Gamma
+  - Project Delta
+  - Project Epsilon
+  - Project Zeta</span>
+}
+    </div>
+
+    <div class="output-area">
+        <div class="centaur-gallery">
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=1" alt="Project Alpha">
+                <div class="centaur-gallery-caption">Project Alpha</div>
+            </div>
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=2" alt="Project Beta">
+                <div class="centaur-gallery-caption">Project Beta</div>
+            </div>
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=3" alt="Project Gamma">
+                <div class="centaur-gallery-caption">Project Gamma</div>
+            </div>
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=4" alt="Project Delta">
+                <div class="centaur-gallery-caption">Project Delta</div>
+            </div>
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=5" alt="Project Epsilon">
+                <div class="centaur-gallery-caption">Project Epsilon</div>
+            </div>
+            <div class="centaur-gallery-item">
+                <img src="https://picsum.photos/400/300?random=6" alt="Project Zeta">
+                <div class="centaur-gallery-caption">Project Zeta</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Form Section -->
+<section class="section" id="form">
+    <h2>Form Component</h2>
+    <p class="desc">Generate forms from natural language descriptions</p>
+    
+    <div class="code-block">
+<span class="directive">@component</span> ContactForm
+<span class="directive">@type</span> form
+<span class="directive">@theme</span> dark
+
+{
+  <span class="string">Create a contact form with
+  name field, email field,
+  message textarea,
+  submit button "Send Message"</span>
+}
+    </div>
+
+    <div class="output-area">
+        <form class="centaur-form" onsubmit="event.preventDefault(); alert('Message sent!');">
+            <div class="centaur-form-group">
+                <label class="centaur-label">Name</label>
+                <input type="text" class="centaur-input" placeholder="Enter your name" required>
+            </div>
+            <div class="centaur-form-group">
+                <label class="centaur-label">Email</label>
+                <input type="email" class="centaur-input" placeholder="Enter your email" required>
+            </div>
+            <div class="centaur-form-group">
+                <label class="centaur-label">Message</label>
+                <textarea class="centaur-textarea" rows="4" placeholder="Enter your message" required></textarea>
+            </div>
+            <button type="submit" class="centaur-submit">Send Message</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer Demo -->
+<section class="section" id="footer">
+    <h2>Footer Component <span class="badge-new">NEW</span></h2>
+    <p class="desc">Multi-column footers with social links</p>
+</section>
+
+<footer class="centaur-footer">
+    <div class="centaur-footer-grid">
+        <div class="centaur-footer-section">
+            <h4>CENTAUR</h4>
+            <a href="#" class="centaur-footer-link">About Us</a>
+            <a href="#" class="centaur-footer-link">Our Story</a>
+            <a href="#" class="centaur-footer-link">Team</a>
+        </div>
+        <div class="centaur-footer-section">
+            <h4>Products</h4>
+            <a href="#" class="centaur-footer-link">CENTAUR LANG</a>
+            <a href="#" class="centaur-footer-link">Documentation</a>
+            <a href="#" class="centaur-footer-link">Examples</a>
+        </div>
+        <div class="centaur-footer-section">
+            <h4>Resources</h4>
+            <a href="#" class="centaur-footer-link">GitHub</a>
+            <a href="#" class="centaur-footer-link">Blog</a>
+            <a href="#" class="centaur-footer-link">Support</a>
+        </div>
+        <div class="centaur-footer-section">
+            <h4>Legal</h4>
+            <a href="#" class="centaur-footer-link">Privacy</a>
+            <a href="#" class="centaur-footer-link">Terms</a>
+            <a href="#" class="centaur-footer-link">License</a>
+        </div>
+    </div>
+    <div class="centaur-footer-social">
+        <a href="https://github.com/Centaur-Lang/centaur-lang" class="centaur-social-link">⌘</a>
+        <a href="https://x.com/aspect_centaur" class="centaur-social-link">𝕏</a>
+        <a href="https://youtube.com/@centaur" class="centaur-social-link">▶</a>
+    </div>
+    <div class="centaur-footer-bottom">
+        <p>© 2025 CENTAUR — Human+AI Creative Partnership</p>
+        <p style="margin-top: 0.5rem; font-size: 0.85rem;">
+            🐴 Created by Chris Conen (Human) + Claude (AI)
+        </p>
+    </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Table search functionality
+document.getElementById('table-search')?.addEventL
