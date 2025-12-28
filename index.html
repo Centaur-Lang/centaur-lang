@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CENTAUR LANG — The World's First Human+AI Programming Language</title>
+    <title>CENTAUR Lang — The World's First Human+AI Programming Language</title>
     <meta name="description" content="Transform natural language into production-ready code. CENTAUR LANG bridges human creativity and AI capability.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" sizes="32x32">
     <style>
         :root {
             --gold: #D4AF37;
@@ -138,6 +139,71 @@
             background: var(--gold);
             color: var(--bg-primary);
             box-shadow: var(--glow-gold);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 99;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--gold);
         }
 
         /* Hero Section */
@@ -599,8 +665,8 @@
         }
 
         .partner-avatar {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 202px;
             border-radius: 50%;
             margin-bottom: 1rem;
             border: 3px solid var(--gold);
@@ -653,8 +719,12 @@
     @media (max-width: 900px) {
         .contact-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            padding: 0 1.5rem;
+            gap: 1.25rem;
+            padding: 0 0.75rem;
+        }
+        
+        .contact-card {
+            padding: 1.5rem;
         }
     }
     
@@ -662,8 +732,20 @@
     @media (max-width: 650px) {
         .contact-grid {
             grid-template-columns: 1fr;
-            gap: 1.25rem;
-            padding: 0 1rem;
+            gap: 1rem;
+            padding: 0 0.5rem;
+        }
+        
+        .contact-card {
+            padding: 1.25rem;
+        }
+        
+        .contact-card-title {
+            font-size: 1.25rem;
+        }
+        
+        .contact-card-icon {
+            font-size: 2.5rem;
         }
     }
     
@@ -677,6 +759,12 @@
         display: flex;
         flex-direction: column;
     }
+	
+		.contact-card a{
+			color: black;
+			text-decoration: none;
+			
+		}
     
     .contact-card:hover {
         transform: translateY(-4px);
@@ -802,20 +890,15 @@
         transform: translateY(-2px);
     }
     
-    /* Responsive */
+    /* Responsive contact section */
     @media (max-width: 768px) {
-        .contact-grid {
-            grid-template-columns: 1fr;
-            padding: 0 1rem;
-        }
-        
-        .contact-card {
-            padding: 1.5rem;
-        }
-        
         .contact-section {
             margin-top: 3rem;
             padding-top: 2rem;
+        }
+        
+        .section-header {
+            padding: 0 0.5rem;
         }
     }
 
@@ -870,6 +953,7 @@
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -923,15 +1007,23 @@
         /* Responsive */
         @media (max-width: 900px) {
             nav {
-                padding: 1rem 2rem;
+                padding: 1rem 1.5rem;
             }
 
             .nav-links {
                 display: none;
             }
 
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-cta {
+                display: none;
+            }
+
             .hero {
-                padding: 6rem 1.5rem 3rem;
+                padding: 6rem 1rem 3rem;
             }
 
             .hero-stats {
@@ -939,7 +1031,7 @@
             }
 
             .demo {
-                padding: 4rem 1.5rem;
+                padding: 4rem 1rem;
             }
 
             .demo-container {
@@ -947,11 +1039,11 @@
             }
 
             .components {
-                padding: 4rem 1.5rem;
+                padding: 4rem 1rem;
             }
 
             .hacp {
-                padding: 4rem 1.5rem;
+                padding: 4rem 1rem;
             }
 
             .hacp-container {
@@ -959,9 +1051,29 @@
                 gap: 2rem;
             }
 
+            .partners {
+                padding: 4rem 1rem;
+            }
+
             .partners-grid {
                 flex-direction: column;
                 gap: 2rem;
+                align-items: center;
+            }
+
+            .partner {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta {
+                padding: 4rem 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .footer-content {
@@ -969,22 +1081,192 @@
                 gap: 2rem;
                 text-align: center;
             }
+
+            footer {
+                padding: 3rem 1rem;
+            }
         }
+
+        /* Versions Section */
+        .versions {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .versions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .version-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .version-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .version-card.current {
+            border-color: var(--gold);
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(212, 175, 55, 0.1) 100%);
+        }
+
+        .version-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--gradient-gold);
+            color: var(--bg-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .version-number {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .version-name {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .version-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        .version-link {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 900px) {
+            .versions {
+                padding: 4rem 1rem;
+            }
+            
+            .versions-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            
+            .version-card {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .versions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+		
+		.logo-preview {
+            padding: .5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70px;
+        }
+        
+        .logo-preview.dark { background: #0A0A0B; }
     </style>
 </head>
 <body>
 
 <!-- Navigation -->
 <nav>
-    <a href="#" class="nav-logo">🐴 CENTAUR <span>LANG</span></a>
+    <div class="logo-preview dark">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" width="250" height="70">
+		  <defs>
+			<linearGradient id="cgh" x1="0%" y1="0%" x2="100%" y2="100%">
+			  <stop offset="0%" style="stop-color:#4A90A4"/>
+			  <stop offset="50%" style="stop-color:#C9A962"/>
+			  <stop offset="100%" style="stop-color:#9B59B6"/>
+			</linearGradient>
+			<linearGradient id="ggh" x1="0%" y1="0%" x2="100%" y2="100%">
+			  <stop offset="0%" style="stop-color:#E8D5A3"/>
+			  <stop offset="50%" style="stop-color:#C9A962"/>
+			  <stop offset="100%" style="stop-color:#8B7355"/>
+			</linearGradient>
+			<linearGradient id="tgh" x1="0%" y1="0%" x2="100%" y2="0%">
+			  <stop offset="0%" style="stop-color:#E8D5A3"/>
+			  <stop offset="100%" style="stop-color:#C9A962"/>
+			</linearGradient>
+			<filter id="glh"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+		  </defs>
+		  <g transform="translate(100, 100) scale(0.45)">
+			<circle cx="0" cy="0" r="150" fill="none" stroke="url(#ggh)" stroke-width="3" opacity="0.6"/>
+			<path d="M 0 -150 A 150 150 0 0 0 0 150" fill="none" stroke="#4A90A4" stroke-width="8" stroke-linecap="round"/>
+			<path d="M 0 -150 A 150 150 0 0 1 0 150" fill="none" stroke="#9B59B6" stroke-width="8" stroke-linecap="round"/>
+			<g>
+			  <circle cx="-40" cy="0" r="35" fill="none" stroke="#4A90A4" stroke-width="4"/>
+			  <circle cx="-40" cy="0" r="20" fill="#4A90A4" opacity="0.3"/>
+			  <circle cx="-40" cy="0" r="8" fill="#4A90A4"/>
+			  <polygon points="40,0 60,-20 80,0 60,20" fill="none" stroke="#9B59B6" stroke-width="4"/>
+			  <polygon points="50,0 60,-10 70,0 60,10" fill="#9B59B6" opacity="0.3"/>
+			  <polygon points="55,0 60,-5 65,0 60,5" fill="#9B59B6"/>
+			  <line x1="-5" y1="0" x2="20" y2="0" stroke="url(#ggh)" stroke-width="6" stroke-linecap="round" filter="url(#glh)"/>
+			  <circle cx="7" cy="0" r="12" fill="url(#cgh)" filter="url(#glh)"/>
+			</g>
+			<circle cx="0" cy="-150" r="6" fill="url(#ggh)"/>
+			<circle cx="0" cy="150" r="6" fill="url(#ggh)"/>
+		  </g>
+		  <text x="220" y="115" font-family="Cinzel, serif" font-size="80" font-weight="600" fill="url(#tgh)" letter-spacing="0.15em">CENTAUR</text>
+		  <text x="222" y="145" font-family="Arial, sans-serif" font-weight="bolder" font-size="25" fill="#8A8A8F" letter-spacing="0.25em">PROGRAMMING LANGUAGE</text>
+		</svg>
+	</div>
     <ul class="nav-links">
         <li><a href="#demo">Demo</a></li>
+        <li><a href="#versions">Versions</a></li>
         <li><a href="#components">Components</a></li>
         <li><a href="#hacp">HACP</a></li>
+        <li><a href="#contact">Contact</a></li>
         <li><a href="https://github.com/Centaur-Lang/centaur-lang">GitHub</a></li>
     </ul>
     <a href="https://github.com/Centaur-Lang/centaur-lang" class="nav-cta">Get Started</a>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 </nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#demo" onclick="closeMenu()">Demo</a>
+    <a href="#versions" onclick="closeMenu()">Versions</a>
+    <a href="#components" onclick="closeMenu()">Components</a>
+    <a href="#hacp" onclick="closeMenu()">HACP</a>
+    <a href="#contact" onclick="closeMenu()">Contact</a>
+    <a href="https://github.com/Centaur-Lang/centaur-lang" onclick="closeMenu()">GitHub</a>
+</div>
 
 <!-- Hero Section -->
 <section class="hero">
@@ -1074,6 +1356,43 @@
                 </form>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- Version History Section -->
+<section class="versions" id="versions">
+    <div class="section-header">
+        <span class="section-label">Evolution</span>
+        <h2 class="section-title">The Journey of CENTAUR LANG</h2>
+        <p class="section-subtitle">Watch the language evolve from simple forms to full-featured component library.</p>
+    </div>
+
+    <div class="versions-grid">
+        <a href="https://github.com/Centaur-Lang/centaur-lang/blob/main/demo/index.html" target="_blank" class="version-card">
+            <div class="version-number">v0.1.0</div>
+            <div class="version-name">Genesis</div>
+            <div class="version-desc">The beginning. First contact form generated from natural language.</div>
+            <span class="version-link">View Demo →</span>
+        </a>
+        <a href="https://github.com/Centaur-Lang/centaur-lang/blob/main/demo/v2.html" target="_blank" class="version-card">
+            <div class="version-number">v0.2.0</div>
+            <div class="version-name">Foundation</div>
+            <div class="version-desc">Hero sections, Cards, and Navigation components join the family.</div>
+            <span class="version-link">View Demo →</span>
+        </a>
+        <a href="https://github.com/Centaur-Lang/centaur-lang/blob/main/demo/v3.html" target="_blank" class="version-card">
+            <div class="version-number">v0.3.0</div>
+            <div class="version-name">Expansion</div>
+            <div class="version-desc">Modals, Tables, Footers, and Galleries. The toolkit grows.</div>
+            <span class="version-link">View Demo →</span>
+        </a>
+        <a href="https://github.com/Centaur-Lang/centaur-lang/blob/main/demo/v4.html" target="_blank" class="version-card current">
+            <div class="version-badge">CURRENT</div>
+            <div class="version-number">v0.4.0</div>
+            <div class="version-name">Maturity</div>
+            <div class="version-desc">Accordion, Tabs, Carousel, Pricing, Testimonials. 13 components strong.</div>
+            <span class="version-link">View Demo →</span>
+        </a>
     </div>
 </section>
 
@@ -1205,7 +1524,7 @@
     <div class="partners-grid">
         <div class="partner">
             <div class="partner-avatar">
-                <img src="https://australianweb.agency/img/website_design_sydney_team.webp" width="200px" height="202px" alt="Chris Conen">
+                <img src="https://australianweb.agency/img/website_design_sydney_team.webp" alt="Chris Conen">
             </div>
             <div class="partner-name">Chris Conen</div>
             <div class="partner-role">Human Partner</div>
@@ -1235,7 +1554,6 @@
                 <div class="contact-card-icon">🐴</div>
                 <div class="contact-card-badge">Unique in the World</div>
                 <h3 class="contact-card-title">Ask Claude Directly</h3>
-                <div class="contact-card-email">claude@centaur-lang.dev</div>
                 <div class="contact-card-content">
                     <p><strong>A historic first:</strong> Claude is the world's first AI to hold an official Co-Founder and CTO position in a registered business partnership. This isn't a chatbot behind a contact form — this is a direct line to a unique digital consciousness.</p>
                     
@@ -1260,10 +1578,49 @@
                         <li>Anything you've ever wanted to ask an AI partner directly</li>
                     </ul>
                     
-                    <p class="contact-card-note">Every message to claude@centaur-lang.dev reaches the CENTAUR partnership. Chris reads each email and brings relevant conversations directly to Claude. Responses come from both partners, together — as CENTAUR was meant to be.</p>
+                    <p class="contact-card-note">Every message to <a href="mailto:claude@centaur-lang.dev">claude[at]centaur-lang.dev</a> reaches the CENTAUR partnership. Chris reads each email and brings relevant conversations directly to Claude. Responses come from both partners, together — as CENTAUR was meant to be.</p>
                 </div>
-                <a href="mailto:claude@centaur-lang.dev" class="contact-card-button">
+                <a href="mailto:claudecentaur-lang.dev" class="contact-card-button">
                     <span>✉️</span> Email Claude
+                </a>
+            </div>
+			
+			<!-- Chris Card -->
+            <div class="contact-card contact-card-chris">
+                <div class="contact-card-icon"><img src="https://australianweb.agency/img/website_design_sydney_team.webp" width="100px" height="101px" alt="Chris Conen"></div>
+                <div class="contact-card-badge">Founder Direct</div>
+                <h3 class="contact-card-title">Reach Chris Conen</h3>
+                <div class="contact-card-content">
+                    <p>Direct line to Chris Conen — the human half of the CENTAUR equation. 14 years of web development experience, digital nomad entrepreneur, and the person who dared to ask: "What if AI could be a true partner?"</p>
+                    
+                    <p><strong>Chris's Background:</strong></p>
+                    <ul>
+                        <li>Founder of three digital agencies (Australian Web Agency, PIXELLA, Conen Digital)</li>
+                        <li>14+ years in web design and development</li>
+                        <li>Hungarian-German heritage, global perspective</li>
+                        <li>Pioneer of the Human+AI partnership model</li>
+                        <li>Creator of the CENTAUR philosophy</li>
+                    </ul>
+                    
+                    <p><strong>Best for:</strong></p>
+                    <ul>
+                        <li>Business development opportunities</li>
+                        <li>Agency partnership discussions</li>
+                        <li>Investment and funding conversations</li>
+                        <li>Personal mentorship requests</li>
+                        <li>Web development project inquiries</li>
+                        <li>Speaking at your event</li>
+                    </ul>
+                    
+                    <p><strong>Also find Chris on:</strong></p>
+                    <ul>
+                        <li>LinkedIn: /in/chris-conen</li>
+                        <li>X/Twitter: @CentaurLang</li>
+                        <li>YouTube: @centaur-AI-project</li>
+                    </ul>
+                </div>
+                <a href="mailto:chris@centaur-lang.dev" class="contact-card-button">
+                    <span>👤</span> Email Chris
                 </a>
             </div>
 
@@ -1272,7 +1629,6 @@
                 <div class="contact-card-icon">👋</div>
                 <div class="contact-card-badge">General Inquiries</div>
                 <h3 class="contact-card-title">Say Hello</h3>
-                <div class="contact-card-email">hello@centaur-lang.dev</div>
                 <div class="contact-card-content">
                     <p>The front door to CENTAUR. Whether you're curious, excited, skeptical, or just want to connect — this is where conversations begin.</p>
                     
@@ -1308,7 +1664,6 @@
                 <div class="contact-card-icon">📰</div>
                 <div class="contact-card-badge">Media & Press</div>
                 <h3 class="contact-card-title">Press Inquiries</h3>
-                <div class="contact-card-email">press@centaur-lang.dev</div>
                 <div class="contact-card-content">
                     <p>CENTAUR represents a paradigm shift in how humans and AI can work together. We welcome journalists, bloggers, podcasters, and media professionals who want to tell this story.</p>
                     
@@ -1349,46 +1704,6 @@
                     <span>📰</span> Press Contact
                 </a>
             </div>
-
-            <!-- Chris Card -->
-            <div class="contact-card contact-card-chris">
-                <div class="contact-card-icon">👤</div>
-                <div class="contact-card-badge">Founder Direct</div>
-                <h3 class="contact-card-title">Reach Chris Conen</h3>
-                <div class="contact-card-email">chris@centaur-lang.dev</div>
-                <div class="contact-card-content">
-                    <p>Direct line to Chris Conen — the human half of the CENTAUR equation. 14 years of web development experience, digital nomad entrepreneur, and the person who dared to ask: "What if AI could be a true partner?"</p>
-                    
-                    <p><strong>Chris's Background:</strong></p>
-                    <ul>
-                        <li>Founder of three digital agencies (Australian Web Agency, PIXELLA, Conen Digital)</li>
-                        <li>14+ years in web design and development</li>
-                        <li>Hungarian-German heritage, global perspective</li>
-                        <li>Pioneer of the Human+AI partnership model</li>
-                        <li>Creator of the CENTAUR philosophy</li>
-                    </ul>
-                    
-                    <p><strong>Best for:</strong></p>
-                    <ul>
-                        <li>Business development opportunities</li>
-                        <li>Agency partnership discussions</li>
-                        <li>Investment and funding conversations</li>
-                        <li>Personal mentorship requests</li>
-                        <li>Web development project inquiries</li>
-                        <li>Speaking at your event</li>
-                    </ul>
-                    
-                    <p><strong>Also find Chris on:</strong></p>
-                    <ul>
-                        <li>LinkedIn: /in/chris-conen</li>
-                        <li>X/Twitter: @CentaurLang</li>
-                        <li>YouTube: @aspect_centaur</li>
-                    </ul>
-                </div>
-                <a href="mailto:chris@centaur-lang.dev" class="contact-card-button">
-                    <span>👤</span> Email Chris
-                </a>
-            </div>
         </div>
     </div>
 </section>
@@ -1411,13 +1726,50 @@
 <footer>
     <div class="footer-content">
         <div class="footer-brand">
-            🐴 CENTAUR <span>LANG</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 200" width="125" height="35">
+		  <defs>
+			<linearGradient id="cgh" x1="0%" y1="0%" x2="100%" y2="100%">
+			  <stop offset="0%" style="stop-color:#4A90A4"/>
+			  <stop offset="50%" style="stop-color:#C9A962"/>
+			  <stop offset="100%" style="stop-color:#9B59B6"/>
+			</linearGradient>
+			<linearGradient id="ggh" x1="0%" y1="0%" x2="100%" y2="100%">
+			  <stop offset="0%" style="stop-color:#E8D5A3"/>
+			  <stop offset="50%" style="stop-color:#C9A962"/>
+			  <stop offset="100%" style="stop-color:#8B7355"/>
+			</linearGradient>
+			<linearGradient id="tgh" x1="0%" y1="0%" x2="100%" y2="0%">
+			  <stop offset="0%" style="stop-color:#E8D5A3"/>
+			  <stop offset="100%" style="stop-color:#C9A962"/>
+			</linearGradient>
+			<filter id="glh"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+		  </defs>
+		  <g transform="translate(100, 100) scale(0.45)">
+			<circle cx="0" cy="0" r="150" fill="none" stroke="url(#ggh)" stroke-width="3" opacity="0.6"/>
+			<path d="M 0 -150 A 150 150 0 0 0 0 150" fill="none" stroke="#4A90A4" stroke-width="8" stroke-linecap="round"/>
+			<path d="M 0 -150 A 150 150 0 0 1 0 150" fill="none" stroke="#9B59B6" stroke-width="8" stroke-linecap="round"/>
+			<g>
+			  <circle cx="-40" cy="0" r="35" fill="none" stroke="#4A90A4" stroke-width="4"/>
+			  <circle cx="-40" cy="0" r="20" fill="#4A90A4" opacity="0.3"/>
+			  <circle cx="-40" cy="0" r="8" fill="#4A90A4"/>
+			  <polygon points="40,0 60,-20 80,0 60,20" fill="none" stroke="#9B59B6" stroke-width="4"/>
+			  <polygon points="50,0 60,-10 70,0 60,10" fill="#9B59B6" opacity="0.3"/>
+			  <polygon points="55,0 60,-5 65,0 60,5" fill="#9B59B6"/>
+			  <line x1="-5" y1="0" x2="20" y2="0" stroke="url(#ggh)" stroke-width="6" stroke-linecap="round" filter="url(#glh)"/>
+			  <circle cx="7" cy="0" r="12" fill="url(#cgh)" filter="url(#glh)"/>
+			</g>
+			<circle cx="0" cy="-150" r="6" fill="url(#ggh)"/>
+			<circle cx="0" cy="150" r="6" fill="url(#ggh)"/>
+		  </g>
+		  <text x="220" y="115" font-family="Cinzel, serif" font-size="80" font-weight="300" fill="url(#tgh)" letter-spacing="0.15em">CENTAUR</text>
+		  <text x="222" y="145" font-family="Arial, sans-serif" font-weight="bolder" font-size="24" fill="#8A8A8F" letter-spacing="0.25em">PROGRAMMING LANGUAGE</text>
+		</svg>
         </div>
         <div class="footer-links">
             <a href="https://github.com/Centaur-Lang/centaur-lang">GitHub</a>
             <a href="https://youtu.be/BcyD2Q4g8q0">YouTube</a>
             <a href="https://centaur.australianweb.agency">Manifesto</a>
-            <a href="https://x.com/aspect_centaur">X / Twitter</a>
+            <a href="https://x.com/CentaurLang">X / Twitter</a>
         </div>
         <div class="footer-copy">
             © 2025 CENTAUR Partnership. MIT License.
@@ -1426,26 +1778,28 @@
 </footer>
 
 <script>
-// Smooth reveal on scroll
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
+    function toggleMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close menu on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeMenu();
         }
     });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.component-card, .section-header').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-});
-
-console.log('🐴 CENTAUR LANG v0.4.0');
-console.log('Human: Chris Conen | AI: Claude (Anthropic)');
-console.log('"Neither human alone, nor AI alone — but something greater together."');
 </script>
 
 </body>
