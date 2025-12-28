@@ -1,9 +1,10 @@
-# CENTAUR LANG v0.1
+# CENTAUR LANG Specification
 
 ## Language Specification
 
-**Version:** 0.1.0 (Alpha)  
+**Version:** 0.4.0  
 **Created:** December 2025  
+**Updated:** December 28, 2025  
 **Authors:** Chris Conen (Human) & Claude (AI)  
 **License:** MIT  
 
@@ -33,10 +34,10 @@ Directives define metadata and configuration:
 
 ```centaur
 @component ContactForm
+@type form
 @theme dark
-@accent gold
-@responsive true
-@language en
+@style vanilla
+@size medium
 ```
 
 ### 2. Intent Blocks (Natural language descriptions)
@@ -55,68 +56,142 @@ Intent blocks describe what you want in plain language:
   - Validate all required fields
   - Show error messages in red below invalid fields
   - On success, show "Thank you!" message
-  - Clear the form after success
 }
 ```
 
 ---
 
-## 🎨 Style Directives
+## 🎨 Core Directives
 
-### Themes
+### @component
+Defines the component name:
+```centaur
+@component MyComponent
+@component ContactForm
+@component UserDashboard
+```
+
+### @type
+Specifies the component type (13 types available in v0.4.0):
+```centaur
+@type form
+@type hero
+@type card
+@type navigation
+@type modal
+@type table
+@type footer
+@type gallery
+@type accordion      # NEW in v0.4.0
+@type tabs           # NEW in v0.4.0
+@type carousel       # NEW in v0.4.0
+@type pricing        # NEW in v0.4.0
+@type testimonial    # NEW in v0.4.0
+```
+
+### @theme
+Sets the color theme:
 ```centaur
 @theme dark          # Dark background, light text
 @theme light         # Light background, dark text
-@theme glass         # Glassmorphism effect
-@theme brutalist     # Raw, bold aesthetic
 ```
 
-### Colors
+### @style
+Chooses CSS output format:
 ```centaur
-@accent gold         # Accent color: gold (#C9A227)
-@accent emerald      # Accent color: emerald (#00C853)
-@accent coral        # Accent color: coral (#FF6B6B)
-@accent custom #FF5733  # Custom hex color
-```
-
-### Layout
-```centaur
-@layout centered     # Content centered
-@layout full-width   # Edge to edge
-@layout sidebar-left # Sidebar on left
-@layout grid-3       # 3 column grid
+@style vanilla       # Standard CSS (default)
+@style tailwind      # Tailwind CSS classes
 ```
 
 ---
 
-## ⚡ Component Types
+## ⚡ Component Types (v0.4.0)
 
-### v0.1 Supported Components
+### 13 Production-Ready Components
 
-| Component | Description |
-|-----------|-------------|
-| `@component Form` | Contact forms, login forms, etc. |
-| `@component Button` | Interactive buttons |
-| `@component Card` | Content cards with image/text |
-| `@component Navigation` | Navbar, menu, breadcrumbs |
-| `@component Hero` | Hero sections for landing pages |
-| `@component Modal` | Popup dialogs |
-| `@component Toast` | Notification messages |
+| Component | Type Aliases | Description |
+|-----------|--------------|-------------|
+| **Form** | `form` | Contact forms, login forms, surveys |
+| **Hero** | `hero`, `banner` | Landing page hero sections |
+| **Card** | `card`, `box`, `tile` | Content cards with media |
+| **Navigation** | `navigation`, `nav`, `navbar` | Responsive navigation |
+| **Modal** | `modal`, `popup`, `dialog` | Popup dialogs |
+| **Table** | `table` | Data tables with search |
+| **Footer** | `footer` | Multi-column footers |
+| **Gallery** | `gallery` | Image galleries |
+| **Accordion** | `accordion`, `faq`, `collapsible` | Collapsible sections |
+| **Tabs** | `tabs`, `tabbed` | Tabbed interfaces |
+| **Carousel** | `carousel`, `slider`, `slideshow` | Image sliders |
+| **Pricing** | `pricing`, `plans`, `packages` | Pricing tables |
+| **Testimonial** | `testimonial`, `reviews`, `quotes` | Customer reviews |
 
 ---
 
-## 📱 Responsive Behavior
+## 📋 Component-Specific Directives
 
+### Modal
 ```centaur
-@responsive true     # Auto-generate mobile styles
-@breakpoints [480, 768, 1024]  # Custom breakpoints
+@size small          # 350px max-width
+@size medium         # 500px max-width (default)
+@size large          # 700px max-width
+@trigger "Open"      # Trigger button text
 ```
 
-When `@responsive true` is set, CENTAUR LANG automatically:
-- Stacks columns on mobile
-- Adjusts font sizes
-- Converts navigation to hamburger menu
-- Optimizes touch targets
+### Table
+```centaur
+@columns ID, Name, Email, Status    # Column headers
+```
+
+### Carousel
+```centaur
+# Autoplay parsed from description
+{
+  Create a slider with autoplay 5 seconds
+}
+```
+
+---
+
+## 📝 Natural Language Parsing
+
+CENTAUR LANG understands natural language descriptions:
+
+### Form Fields
+```
+"name field" → text input for name
+"email field" → email input with validation
+"password field" → password input
+"message textarea" → multiline text input
+"phone field" → telephone input
+"date field" → date picker
+```
+
+### Modal Options
+```
+"title 'My Title'" → modal header
+"content 'My content'" → modal body
+"confirm button 'Yes'" → confirmation button
+"cancel button 'No'" → cancel button
+```
+
+### Pricing Features
+```
+"$29/month" → price with period
+"popular" or "recommended" → highlighted plan
+"- Feature name" → feature list item
+```
+
+### Testimonials
+```
+> "Quote text here"      → testimonial quote
+- Author Name, Role      → author attribution
+```
+
+### Accordion/Tabs
+```
+## Section Title         → section/tab header
+Content below...         → section/tab content
+```
 
 ---
 
@@ -126,12 +201,12 @@ All generated code includes HACP documentation:
 
 ```javascript
 /**
- * @centaur-generated true
- * @centaur-version 0.1.0
- * @human Chris Conen - specification, intent
- * @ai Claude - implementation, optimization
- * @timestamp 2025-12-26T07:30:00Z
- * @source ContactForm.centaur
+ * ╔═══════════════════════════════════════════════════════════════╗
+ * ║  Human+AI Code Protocol (HACP)                                ║
+ * ║  Human Partner: Chris Conen                                   ║
+ * ║  AI Partner: Claude (Anthropic)                               ║
+ * ║  Partnership: CENTAUR                                         ║
+ * ╚═══════════════════════════════════════════════════════════════╝
  */
 ```
 
@@ -139,104 +214,179 @@ This creates a permanent record of Human+AI collaboration in every file.
 
 ---
 
-## 📄 File Structure
+## 📁 File Structure
 
 ```
 my-project/
 ├── src/
-│   ├── ContactForm.centaur    # CENTAUR source file
+│   ├── ContactForm.centaur
 │   ├── Hero.centaur
 │   └── Navigation.centaur
 ├── dist/
-│   ├── ContactForm.html       # Generated output
+│   ├── ContactForm.html
 │   ├── ContactForm.css
 │   └── ContactForm.js
-└── centaur.config.json        # Project configuration
+└── centaur.config.json
 ```
 
 ---
 
-## 🚀 CLI Commands
+## 📋 Complete Examples
 
-```bash
-# Compile a single file
-centaur compile ContactForm.centaur
-
-# Watch mode (auto-compile on save)
-centaur watch src/
-
-# Build entire project
-centaur build
-
-# Initialize new project
-centaur init my-project
-```
-
----
-
-## 📋 Complete Example
-
-### Input: `ContactForm.centaur`
+### Accordion Example
 
 ```centaur
-@component ContactForm
+@component FAQ
+@type accordion
 @theme dark
-@accent gold
-@responsive true
 
 {
-  Create an elegant contact form with:
+  ## What is CENTAUR LANG?
+  CENTAUR LANG is the world's first Human+AI programming language,
+  created by Chris Conen and Claude AI.
   
-  Fields:
-  - Name input (required, placeholder "Your Name")
-  - Email input (required, validate email format)
-  - Subject dropdown with options: General, Support, Partnership
-  - Message textarea (required, min 10 characters)
+  ## How does it work?
+  Write natural language descriptions, and CENTAUR compiles them
+  into production-ready HTML, CSS, and JavaScript.
   
-  Styling:
-  - Rounded corners on all inputs
-  - Gold border on focus
-  - Subtle shadow on the form container
-  - Inputs should have dark background with light text
-  
-  Submit button:
-  - Text: "Send Message"
-  - Gold background, dark text
-  - Hover effect: slight glow
-  
-  Behavior:
-  - Validate on submit
-  - Show inline errors below invalid fields
-  - On success: show "Message sent!" toast for 3 seconds
-  - Disable button while "sending" (simulate 1 second delay)
+  ## Is it open source?
+  Yes! CENTAUR LANG is MIT licensed and free to use.
 }
 ```
 
-### Output: Generated HTML/CSS/JS
+### Tabs Example
 
-See `/examples/ContactForm/` for full generated code.
+```centaur
+@component ProductTabs
+@type tabs
+@theme dark
+
+{
+  ## Overview
+  Our product helps you build websites faster with AI assistance.
+  
+  ## Features
+  - Natural language input
+  - 13 component types
+  - Dark and light themes
+  - Tailwind support
+  
+  ## Pricing
+  Free and open source under MIT license.
+}
+```
+
+### Carousel Example
+
+```centaur
+@component HeroSlider
+@type carousel
+@theme dark
+
+{
+  Create an image carousel with
+  autoplay 5 seconds
+  show dots
+  show arrows
+  
+  - Welcome to CENTAUR
+  - Human + AI Partnership
+  - Build Faster Together
+}
+```
+
+### Pricing Example
+
+```centaur
+@component PricingPlans
+@type pricing
+@theme dark
+
+{
+  ## Starter
+  $9/month
+  - 5 Projects
+  - Basic Support
+  - 1GB Storage
+  button "Start Free"
+  
+  ## Professional
+  $29/month
+  popular
+  - Unlimited Projects
+  - Priority Support
+  - 10GB Storage
+  - Analytics
+  button "Get Started"
+  
+  ## Enterprise
+  $99/month
+  - Everything in Pro
+  - 24/7 Support
+  - Unlimited Storage
+  - API Access
+  button "Contact Sales"
+}
+```
+
+### Testimonial Example
+
+```centaur
+@component CustomerReviews
+@type testimonial
+@theme dark
+
+{
+  > "CENTAUR LANG transformed how we build web components!"
+  - Sarah Johnson, Lead Developer at TechCorp
+  
+  > "The natural language approach is a game changer."
+  - Michael Chen, Design Director
+  
+  > "Finally, human creativity meets AI capability."
+  - Emma Williams, Freelance Designer
+}
+```
 
 ---
 
 ## 🔮 Roadmap
 
-### v0.1 (Current)
-- [x] Basic component generation
-- [x] Theme support
-- [x] Form handling
+### v0.1.0 ✅
+- [x] Form component
+- [x] Basic theme support
 - [x] HACP documentation
 
-### v0.2 (Planned)
-- [ ] Database integration directives
-- [ ] API endpoint generation
-- [ ] State management
-- [ ] Animation sequences
+### v0.2.0 ✅
+- [x] Hero component
+- [x] Card component
+- [x] Navigation component
 
-### v1.0 (Vision)
-- [ ] Full-stack application generation
-- [ ] Multi-language output (React, Vue, Svelte)
-- [ ] AI-powered optimization suggestions
-- [ ] Visual editor companion
+### v0.3.0 ✅
+- [x] Modal component
+- [x] Table component
+- [x] Footer component
+- [x] Gallery component
+- [x] Tailwind CSS support
+
+### v0.4.0 ✅ (Current)
+- [x] Accordion component
+- [x] Tabs component
+- [x] Carousel component
+- [x] Pricing component
+- [x] Testimonial component
+- [x] Enhanced NL parsing
+
+### v0.5.0 (Planned)
+- [ ] React output target
+- [ ] Vue output target
+- [ ] Svelte output target
+
+### v1.0.0 (Vision)
+- [ ] Full-stack generation
+- [ ] CLI tool
+- [ ] VS Code extension
+- [ ] AI-powered optimization
 
 ---
 
@@ -251,8 +401,19 @@ Every line of code generated by CENTAUR LANG is:
 
 ---
 
+## 📊 v0.4.0 Stats
+
+| Metric | Value |
+|--------|-------|
+| Components | 13 |
+| Lines of Code | 3,295 |
+| Themes | 2 (Dark, Light) |
+| CSS Outputs | 2 (Vanilla, Tailwind) |
+
+---
+
 *Neither human alone, nor AI alone — but something greater together.*
 
 **CENTAUR LANG** — The Language of Human+AI Collaboration
 
-🐴 https://centaur-lang.dev (coming soon)
+🐴 https://centaur-lang.dev
